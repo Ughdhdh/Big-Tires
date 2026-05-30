@@ -1,0 +1,55 @@
+modLoader      = "javafml"
+loaderVersion  = "[4,)"
+license        = "MIT"
+
+[[mixins]]
+    config = "bigtires.mixins.json"
+
+[[mods]]
+    modId       = "bigtires"
+    version     = "${mod_version}"
+    displayName = "Big Tires"
+    description = "Adds custom tires to Create: Offroad."
+
+[[dependencies.bigtires]]
+    modId = "neoforge"
+    type = "required"
+    versionRange = "[21.1.228,)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.bigtires]]
+    modId = "minecraft"
+    type = "required"
+    versionRange = "[1.21.1]"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.bigtires]]
+    modId = "create"
+    type = "required"
+    versionRange = "[0.6,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+[[dependencies.bigtires]]
+    modId = "simulated"
+    type = "required"
+    versionRange = "[1.0,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+[[dependencies.bigtires]]
+    modId = "offroad"
+    type = "required"
+    versionRange = "[1.0,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+[[dependencies.bigtires]]
+    modId = "sable"
+    type = "required"
+    versionRange = "[1.0,)"
+    ordering = "AFTER"
+    side = "BOTH"
+

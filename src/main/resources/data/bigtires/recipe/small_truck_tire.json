@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "B",
+    "S",
+    "B"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:dried_kelp_block"
+    },
+    "S": {
+      "item": "create:shaft"
+    }
+  },
+  "result": {
+    "id": "bigtires:small_truck_tire",
+    "count": 2
+  }
+}

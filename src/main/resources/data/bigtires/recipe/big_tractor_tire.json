@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CDC",
+    "DSD",
+    "CDC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:sugar_cane"
+    },
+    "D": {
+      "item": "minecraft:dried_kelp_block"
+    },
+    "S": {
+      "item": "create:shaft"
+    }
+  },
+  "result": {
+    "id": "bigtires:big_tractor_tire",
+    "count": 2
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DBD",
+    "BSB",
+    "DBD"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:dried_kelp"
+    },
+    "B": {
+      "item": "minecraft:dried_kelp_block"
+    },
+    "S": {
+      "item": "create:shaft"
+    }
+  },
+  "result": {
+    "id": "bigtires:truck_tire",
+    "count": 2
+  }
+}

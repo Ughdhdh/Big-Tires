@@ -1,0 +1,117 @@
+{
+	"parent": "block/air",
+	"ambientocclusion": false,
+	"textures": {
+		"huge_rowing_wide_tire": "bigtires:block/huge_rowing_wide_tire",
+		"particle": "bigtires:block/huge_rowing_wide_tire"
+	},
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "bigtires:models/item/huge_rowing_wide_tire/huge_rowing_wide_tire.obj",
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [
+				75,
+				45,
+				0
+			],
+			"translation": [
+				0,
+				2.5,
+				0
+			],
+			"scale": [
+				0.1157,
+				0.1157,
+				0.1157
+			]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [
+				75,
+				45,
+				0
+			],
+			"translation": [
+				0,
+				2.5,
+				0
+			],
+			"scale": [
+				0.1157,
+				0.1157,
+				0.1157
+			]
+		},
+		"firstperson_righthand": {
+			"rotation": [
+				0,
+				45,
+				0
+			],
+			"scale": [
+				0.1157,
+				0.1157,
+				0.1157
+			]
+		},
+		"firstperson_lefthand": {
+			"rotation": [
+				0,
+				225,
+				0
+			],
+			"scale": [
+				0.1157,
+				0.1157,
+				0.1157
+			]
+		},
+		"ground": {
+			"translation": [
+				0,
+				3,
+				0
+			],
+			"scale": [
+				0.0868,
+				0.0868,
+				0.0868
+			]
+		},
+		"gui": {
+			"rotation": [
+				30,
+				225,
+				0
+			],
+			"translation": [
+				0,
+				0,
+				0
+			],
+			"scale": [
+				0.0926,
+				0.0926,
+				0.0926
+			]
+		},
+		"fixed": {
+			"rotation": [
+				90,
+				0,
+				0
+			],
+			"translation": [
+				0,
+				0,
+				0
+			],
+			"scale": [
+				0.1157,
+				0.1157,
+				0.1157
+			]
+		}
+	}
+}

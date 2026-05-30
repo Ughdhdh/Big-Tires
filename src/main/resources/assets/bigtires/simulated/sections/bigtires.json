@@ -1,0 +1,11 @@
+{
+  "priority": 3000,
+  "title": {
+    "text": { "translate": "bigtires.simulated_section.bigtires" },
+    "background":      "#aa0a1a0a",
+    "color":           "#ffffd700",
+    "secondary_color": "#ffb8860b"
+  },
+  "sprite": "bigtires:banner",
+  "only_animate_on_hover": true
+}

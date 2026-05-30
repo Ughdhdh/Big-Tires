@@ -1,0 +1,30 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "E": {
+      "tag": "aeronautics:envelope"
+    },
+    "D": {
+      "item": "minecraft:dried_kelp"
+    },
+    "K": {
+      "item": "minecraft:dried_kelp_block"
+    },
+    "S": {
+      "item": "create:shaft"
+    }
+  },
+  "pattern": [
+    " DDD ",
+    "DEKED",
+    "DKSKD",
+    "DEKED",
+    " DDD "
+  ],
+  "result": {
+    "count": 2,
+    "id": "bigtires:huge_rowing_tire"
+  }
+}

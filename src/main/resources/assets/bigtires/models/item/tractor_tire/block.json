@@ -1,0 +1,11 @@
+{
+	"parent": "block/air",
+	"ambientocclusion": false,
+	"textures": {
+		"tractor_tire": "bigtires:block/tractor_tire",
+		"particle": "bigtires:block/tractor_tire"
+	},
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "bigtires:models/item/tractor_tire/tractor_tire.obj"
+}
