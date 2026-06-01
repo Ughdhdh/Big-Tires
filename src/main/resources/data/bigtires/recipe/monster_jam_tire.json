@@ -1,0 +1,33 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "create:industrial_iron_block"
+    },
+    "K": {
+      "item": "minecraft:dried_kelp_block"
+    },
+    "S": {
+      "item": "create:shaft"
+    },
+    "D": {
+      "item": "minecraft:dried_kelp"
+    },
+    "G": {
+      "item": "create:metal_girder"
+    }
+  },
+  "pattern": [
+    " DKD ",
+    "DGIGD",
+    "KISIK",
+    "DGIGD",
+    " DKD "
+  ],
+  "result": {
+    "count": 2,
+    "id": "bigtires:monster_jam_tire"
+  }
+}

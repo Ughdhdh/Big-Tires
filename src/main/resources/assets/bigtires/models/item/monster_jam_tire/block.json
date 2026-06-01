@@ -1,0 +1,11 @@
+{
+	"parent": "block/air",
+	"ambientocclusion": false,
+	"textures": {
+		"monster_jam_tire": "bigtires:block/monster_jam_tire",
+		"particle": "bigtires:block/monster_jam_tire"
+	},
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "bigtires:models/item/monster_jam_tire/monster_jam_tire.obj"
+}
