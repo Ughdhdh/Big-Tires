@@ -51,4 +51,12 @@ public class BigTireLikes {
     public static final TireLike SMALL_TRUCK_TIRE =
             new TireLike(1.0f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
                     BigTires.path("item/small_truck_tire/block"));
+
+    public static final TireLike MONSTER_JAM_TIRE =
+            new TireLike(5.0f, new Vec3(90,0,0), new Vec3(0.5, -0.1, 0.5),
+                    BigTires.path("item/monster_jam_tire/block"));
+
+    public static final TireLike BAMBOO_TIRE =
+            new TireLike(4.0f, new Vec3(90,0,0), new Vec3(0.5, -0.4, 0.5),
+                    BigTires.path("item/bamboo_tire/block"));
 }

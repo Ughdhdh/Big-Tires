@@ -15,6 +15,7 @@ public record BuoyantTireData(float buoyancy, float paddleForce) {
             Codec.FLOAT.optionalFieldOf("paddle_force", 0.3f).forGetter(BuoyantTireData::paddleForce)
     ).apply(i, BuoyantTireData::new));
 
-    public static final BuoyantTireData ROWING      = new BuoyantTireData(1.0f, 5.0f);
+    public static final BuoyantTireData ROWING      = new BuoyantTireData(1.0f, 6.0f);
     public static final BuoyantTireData ROWING_WIDE = new BuoyantTireData(1.3f, 8.0f);
+    public static final BuoyantTireData BAMBOO      = new BuoyantTireData(0.8f, 4.0f);
 }

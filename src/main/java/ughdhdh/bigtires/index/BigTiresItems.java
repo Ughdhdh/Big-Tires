@@ -72,6 +72,19 @@ public class BigTiresItems {
                         .component(OffroadDataComponents.TIRE,      BigTireLikes.SMALL_TRUCK_TIRE)
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.SMALL_TRUCK))
                 .model(AssetLookup.itemModelWithPartials()).register();
+        // ── Monster Jam Tire 5x5x3.5───────────────────────────────────────────
+        REGISTRATE.item("monster_jam_tire", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.MONSTER_JAM_TIRE)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.MONSTER_JAM))
+                .model(AssetLookup.itemModelWithPartials()).register();
+        // ── Bamboo Tire 4x4x1.5───────────────────────────────────────────
+        REGISTRATE.item("bamboo_tire", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.BAMBOO_TIRE)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.BAMBOO)
+                        .component(BigTiresComponents.BUOYANCY,     BuoyantTireData.BAMBOO))
+                .model(AssetLookup.itemModelWithPartials()).register();
     }
 
     public static void init() {}

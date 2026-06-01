@@ -17,7 +17,9 @@ public class BigTiresPartialModels {
             BIG_TRACTOR_TIRE      = item("big_tractor_tire/block"),
             TRACTOR_TIRE          = item("tractor_tire/block"),
             TRUCK_TIRE            = item("truck_tire/block"),
-            SMALL_TRUCK_TIRE      = item("small_truck_tire/block");
+            SMALL_TRUCK_TIRE      = item("small_truck_tire/block"),
+            MONSTER_JAM_TIRE      = item("monster_jam_tire/block"),
+            BAMBOO_TIRE           = item("bamboo_tire/block");
 
     private static PartialModel item(final String path) {
         return PartialModel.of(BigTires.path("item/" + path));

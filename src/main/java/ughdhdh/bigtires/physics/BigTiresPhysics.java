@@ -144,7 +144,7 @@ public class BigTiresPhysics {
             fwdD.rotateY(chasingYaw);
             fwdD.normalize();
             final double thrust = Math.signum(speed) * data.paddleForce() * submersion * 15.0 * timeStep;
-            out.applyImpulseAtPoint(subLevel, localPos3d, new Vector3d(fwdD).mul(thrust));
+            out.applyImpulseAtPoint(subLevel, localPos3d, new Vector3d(fwdD).mul(-thrust));
         }
     }
 

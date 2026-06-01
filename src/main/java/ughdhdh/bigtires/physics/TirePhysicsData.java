@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 /**
  * Tire physics parameters — DataComponent on the item stack.
- *
+ ---
  *  grip              — arctan(grip) = maximum climbable slope angle:
  *                      1.0→45°, 1.8→61°, 0.25→14°
  *  driveForce        — RPM-to-thrust multiplier
@@ -32,5 +32,8 @@ public record TirePhysicsData(
     public static final TirePhysicsData BIG_TRACTOR = new TirePhysicsData(2.0f, 0.6f, 0.8f, 1.8f);
     public static final TirePhysicsData TRACTOR     = new TirePhysicsData(1.8f, 0.7f, 0.7f, 1.6f);
     public static final TirePhysicsData TRUCK       = new TirePhysicsData(1.1f, 1.1f, 0.4f, 1.0f);
-    public static final TirePhysicsData SMALL_TRUCK = new TirePhysicsData(1.0f, 1.2f, 0.35f, 0.95f);
+    public static final TirePhysicsData SMALL_TRUCK = new TirePhysicsData(1.0f, 1.2f, 0.45f, 0.95f);
+    public static final TirePhysicsData MONSTER_JAM = new TirePhysicsData(0.6f, 0.65f, 0.35f, 0.55f);
+    public static final TirePhysicsData BAMBOO      = new TirePhysicsData(0.85f, 0.9f, 0.7f, 0.45f);
+
 }
