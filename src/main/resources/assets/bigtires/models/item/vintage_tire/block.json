@@ -1,0 +1,11 @@
+{
+	"parent": "block/air",
+	"ambientocclusion": false,
+	"textures": {
+		"vintage_tire": "bigtires:block/vintage_tire",
+		"particle": "bigtires:block/vintage_tire"
+	},
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "bigtires:models/item/vintage_tire/vintage_tire.obj"
+}

@@ -21,7 +21,7 @@ public record TirePhysicsData(
     public static final Codec<TirePhysicsData> CODEC = RecordCodecBuilder.create(i -> i.group(
             Codec.FLOAT.optionalFieldOf("grip",               1.0f).forGetter(TirePhysicsData::grip),
             Codec.FLOAT.optionalFieldOf("drive_force",        1.0f).forGetter(TirePhysicsData::driveForce),
-            Codec.FLOAT.optionalFieldOf("rolling_resistance", 0.3f).forGetter(TirePhysicsData::rollingResistance),
+            Codec.FLOAT.optionalFieldOf("rolling_resistance", 0.67f).forGetter(TirePhysicsData::rollingResistance),
             Codec.FLOAT.optionalFieldOf("lateral_stiffness",  1.0f).forGetter(TirePhysicsData::lateralStiffness)
     ).apply(i, TirePhysicsData::new));
 
@@ -35,5 +35,6 @@ public record TirePhysicsData(
     public static final TirePhysicsData SMALL_TRUCK = new TirePhysicsData(1.0f, 1.2f, 0.45f, 0.95f);
     public static final TirePhysicsData MONSTER_JAM = new TirePhysicsData(0.6f, 0.65f, 0.7f, 0.5f);
     public static final TirePhysicsData BAMBOO      = new TirePhysicsData(0.85f, 0.9f, 0.7f, 0.45f);
+    public static final TirePhysicsData VINTAGE     = new TirePhysicsData(1.0f, 0.95f, 0.8f, 0.35f);
 
 }

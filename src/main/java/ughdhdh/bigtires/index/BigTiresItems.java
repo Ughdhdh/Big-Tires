@@ -72,6 +72,12 @@ public class BigTiresItems {
                         .component(OffroadDataComponents.TIRE,      BigTireLikes.SMALL_TRUCK_TIRE)
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.SMALL_TRUCK))
                 .model(AssetLookup.itemModelWithPartials()).register();
+        // ── Vintage Tire 2×2×1 ───────────────────────────────────────────
+        REGISTRATE.item("vintage_tire", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.VINTAGE_TIRE)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.VINTAGE))
+                .model(AssetLookup.itemModelWithPartials()).register();
         // ── Monster Jam Tire 5x5x3.5───────────────────────────────────────────
         REGISTRATE.item("monster_jam_tire", TireItem::new)
                 .properties(x -> x
