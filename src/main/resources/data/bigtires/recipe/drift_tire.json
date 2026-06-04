@@ -1,0 +1,27 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "create:iron_sheet"
+    },
+    "D": {
+      "item": "minecraft:dried_kelp"
+    },
+    "S": {
+      "item": "create:shaft"
+    }
+  },
+  "pattern": [
+    " DDD ",
+    "DIIID",
+    "DISID",
+    "DIIID",
+    " DDD "
+  ],
+  "result": {
+    "count": 4,
+    "id": "bigtires:drift_tire"
+  }
+}
