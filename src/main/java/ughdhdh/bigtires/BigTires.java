@@ -4,6 +4,8 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
+import ughdhdh.bigtires.index.BigTiresBlockEntityTypes;
+import ughdhdh.bigtires.index.BigTiresBlocks;
 import ughdhdh.bigtires.index.BigTiresComponents;
 import ughdhdh.bigtires.index.BigTiresItems;
 import ughdhdh.bigtires.index.BigTiresPartialModels;
@@ -28,6 +30,11 @@ public class BigTires {
         setTooltips();
 
         BigTiresComponents.init();
+
+        // Блоки должны быть до BlockEntityTypes (BE ссылается на блок)
+        BigTiresBlocks.init();
+        BigTiresBlockEntityTypes.init();
+
         BigTiresItems.init();
 
         listenCommonEvents();

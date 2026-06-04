@@ -10,5 +10,6 @@
 	"item.bigtires.small_truck_tire": "Neumático de camión pequeño",
 	"item.bigtires.monster_jam_tire": "Neumático de monster truck",
 	"item.bigtires.bamboo_tire": "Neumático de bambú",
-	"item.bigtires.vintage_tire": "Neumático clásico"
+	"item.bigtires.vintage_tire": "Neumático clásico",
+	"block.bigtires.motorcycle_wheel_suspension": "Suspensión de rueda de motocicleta"
 }
