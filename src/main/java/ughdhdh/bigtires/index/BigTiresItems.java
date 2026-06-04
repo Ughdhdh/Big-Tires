@@ -91,6 +91,12 @@ public class BigTiresItems {
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.BAMBOO)
                         .component(BigTiresComponents.BUOYANCY,     BuoyantTireData.BAMBOO))
                 .model(AssetLookup.itemModelWithPartials()).register();
+        // ── Drift Tire 1.5x1.5x0.5───────────────────────────────────────────
+        REGISTRATE.item("drift_tire", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.DRIFT_TIRE)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.DRIFT))
+                .model(AssetLookup.itemModelWithPartials()).register();
     }
 
     public static void init() {}
