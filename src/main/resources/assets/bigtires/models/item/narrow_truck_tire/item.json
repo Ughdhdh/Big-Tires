@@ -1,0 +1,117 @@
+{
+	"parent": "block/air",
+	"ambientocclusion": false,
+	"textures": {
+		"narrow_truck_tire": "bigtires:block/narrow_truck_tire",
+		"particle": "bigtires:block/narrow_truck_tire"
+	},
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "bigtires:models/item/narrow_truck_tire/narrow_truck_tire.obj",
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [
+				75,
+				45,
+				0
+			],
+			"translation": [
+				0,
+				2.5,
+				0
+			],
+			"scale": [
+				0.463,
+				0.463,
+				0.463
+			]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [
+				75,
+				45,
+				0
+			],
+			"translation": [
+				0,
+				2.5,
+				0
+			],
+			"scale": [
+				0.463,
+				0.463,
+				0.463
+			]
+		},
+		"firstperson_righthand": {
+			"rotation": [
+				0,
+				45,
+				0
+			],
+			"scale": [
+				0.463,
+				0.463,
+				0.463
+			]
+		},
+		"firstperson_lefthand": {
+			"rotation": [
+				0,
+				225,
+				0
+			],
+			"scale": [
+				0.35,
+				0.35,
+				0.35
+			]
+		},
+		"ground": {
+			"translation": [
+				0,
+				3,
+				0
+			],
+			"scale": [
+				0.3473,
+				0.3473,
+				0.3473
+			]
+		},
+		"gui": {
+			"rotation": [
+				30,
+				225,
+				0
+			],
+			"translation": [
+				-3.1,
+				0.5,
+				0
+			],
+			"scale": [
+				0.25,
+				0.25,
+				0.25
+			]
+		},
+		"fixed": {
+			"rotation": [
+				90,
+				0,
+				0
+			],
+			"translation": [
+				0,
+				0,
+				0
+			],
+			"scale": [
+				0.463,
+				0.463,
+				0.463
+			]
+		}
+	}
+}

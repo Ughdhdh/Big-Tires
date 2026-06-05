@@ -17,6 +17,7 @@ public class BigTiresPartialModels {
             BIG_TRACTOR_TIRE      = item("big_tractor_tire/block"),
             TRACTOR_TIRE          = item("tractor_tire/block"),
             TRUCK_TIRE            = item("truck_tire/block"),
+            NARROW_TRUCK_TIRE     = item("narrow_truck_tire/block"),
             SMALL_TRUCK_TIRE      = item("small_truck_tire/block"),
             VINTAGE_TIRE          = item("vintage_tire/block"),
             MONSTER_JAM_TIRE      = item("monster_jam_tire/block"),

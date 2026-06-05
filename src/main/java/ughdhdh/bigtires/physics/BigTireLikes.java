@@ -48,6 +48,10 @@ public class BigTireLikes {
             new TireLike(1.5f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
                     BigTires.path("item/truck_tire/block"));
 
+    public static final TireLike NARROW_TRUCK_TIRE =
+            new TireLike(1.5f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
+                    BigTires.path("item/narrow_truck_tire/block"));
+
     public static final TireLike SMALL_TRUCK_TIRE =
             new TireLike(1.0f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
                     BigTires.path("item/small_truck_tire/block"));

@@ -66,6 +66,13 @@ public class BigTiresItems {
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.TRUCK))
                 .model(AssetLookup.itemModelWithPartials()).register();
 
+        // ── Narrow Truck Tire 3×3×1 ───────────────────────────────────────────────
+        REGISTRATE.item("narrow_truck_tire", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.NARROW_TRUCK_TIRE)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.NARROW_TRUCK))
+                .model(AssetLookup.itemModelWithPartials()).register();
+
         // ── Small Truck Tire 2×2×1 ───────────────────────────────────────────
         REGISTRATE.item("small_truck_tire", TireItem::new)
                 .properties(x -> x
