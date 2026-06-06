@@ -1,0 +1,11 @@
+{
+	"parent": "block/air",
+	"ambientocclusion": false,
+	"textures": {
+		"wooden_wheel": "bigtires:block/wooden_wheel",
+		"particle": "bigtires:block/wooden_wheel"
+	},
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "bigtires:models/item/wooden_wheel/wooden_wheel.obj"
+}

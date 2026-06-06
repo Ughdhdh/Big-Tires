@@ -2,6 +2,7 @@ package ughdhdh.bigtires.index;
 
 import com.simibubi.create.foundation.data.AssetLookup;
 import ughdhdh.bigtires.BigTires;
+import ughdhdh.bigtires.item.WheelWrenchItem;
 import ughdhdh.bigtires.physics.BigTireLikes;
 import ughdhdh.bigtires.physics.BuoyantTireData;
 import ughdhdh.bigtires.physics.TirePhysicsData;
@@ -66,6 +67,13 @@ public class BigTiresItems {
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.TRUCK))
                 .model(AssetLookup.itemModelWithPartials()).register();
 
+        // ── Narrow Truck Tire 3×3×1 ───────────────────────────────────────────────
+        REGISTRATE.item("narrow_truck_tire", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.NARROW_TRUCK_TIRE)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.NARROW_TRUCK))
+                .model(AssetLookup.itemModelWithPartials()).register();
+
         // ── Small Truck Tire 2×2×1 ───────────────────────────────────────────
         REGISTRATE.item("small_truck_tire", TireItem::new)
                 .properties(x -> x
@@ -91,6 +99,24 @@ public class BigTiresItems {
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.BAMBOO)
                         .component(BigTiresComponents.BUOYANCY,     BuoyantTireData.BAMBOO))
                 .model(AssetLookup.itemModelWithPartials()).register();
+        // ── Drift Tire 1.5x1.5x0.5───────────────────────────────────────────
+        REGISTRATE.item("drift_tire", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.DRIFT_TIRE)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.DRIFT))
+                .model(AssetLookup.itemModelWithPartials()).register();
+
+        // ── Wooden Wheel 1.5x1.5x0.5───────────────────────────────────────────
+        REGISTRATE.item("wooden_wheel", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.WOODEN_WHEEL)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.WOODEN))
+                .model(AssetLookup.itemModelWithPartials()).register();
+
+        // ── Wheel Wrench ──────────────────────────────────────────────────────
+        REGISTRATE.item("wheel_wrench", WheelWrenchItem::new)
+                .model((ctx, prov) -> prov.handheld(ctx::getEntry))
+                .register();
     }
 
     public static void init() {}

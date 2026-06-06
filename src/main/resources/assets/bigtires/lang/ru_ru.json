@@ -6,11 +6,18 @@
 	"item.bigtires.huge_rowing_wide_tire": "Огромное плавающее широкое колесо",
 	"item.bigtires.big_tractor_tire": "Большое колесо трактора",
 	"item.bigtires.tractor_tire": "Колесо трактора",
-	"item.bigtires.truck_tire": "Колесо грузовика",
-	"item.bigtires.small_truck_tire": "Маленькое колесо грузовика",
+	"item.bigtires.truck_tire": "Колесо фуры",
+	"item.bigtires.narrow_truck_tire": "Переднее колесо фуры",
+	"item.bigtires.small_truck_tire": "Маленькое колесо фуры",
 	"item.bigtires.monster_jam_tire": "Колесо монстр-трака",
 	"item.bigtires.bamboo_tire": "Бамбуковое колесо",
 	"item.bigtires.vintage_tire": "Винтажное колесо",
 	"block.bigtires.motorcycle_wheel_suspension": "Подвеска мотоциклетного колеса",
-	"block.bigtires.fixed_wheel_mount": "Жёсткий маунт колеса"
+	"block.bigtires.fixed_wheel_mount": "Жёсткий маунт колеса",
+	"item.bigtires.drift_tire": "Колесо для дрифта",
+	"item.bigtires.wooden_wheel": "Деревянное колесо",
+	"item.bigtires.wheel_wrench": "Гаечный ключ",
+	"item.bigtires.wheel_wrench.tooltip": "ПКМ по Wheel Mount для отражения колеса",
+	"item.bigtires.wheel_wrench.flipped": "Колесо отражено",
+	"item.bigtires.wheel_wrench.unflipped": "Колесо возвращено"
 }

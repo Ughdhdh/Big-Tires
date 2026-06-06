@@ -13,6 +13,7 @@ import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,7 +38,7 @@ public abstract class MixinWheelMountBlockEntity {
     @Shadow
     public abstract ItemStack getHeldItem();
 
-    // ── 1. Buoyancy — HEAD, before all checks in the original method ──────────
+    // ── 1. Buoyancy
 
     @Inject(
             method = "sable$physicsTick",
@@ -60,7 +61,7 @@ public abstract class MixinWheelMountBlockEntity {
         queuedWheelMounts.add(self);
     }
 
-    // ── 2. Extend raycast and initial value for large tires ───────────────────
+    // ── 2. Extend raycast and initial value for large tires
 
     @Redirect(
             method = "computeMaxExtensionToTerrain",
@@ -94,7 +95,7 @@ public abstract class MixinWheelMountBlockEntity {
         return original;
     }
 
-    // ── 3. Fix liftoff for large tires ────────────────────────────────────────
+    // ── 3. Fix liftoff for large tires
 
     @ModifyVariable(
             method = "sable$physicsTick",
@@ -122,7 +123,36 @@ public abstract class MixinWheelMountBlockEntity {
         return maxExtension;
     }
 
-    // ── 4. TirePhysics — only when the wheel is touching the ground ───────────
+    // ── 4. Масштабируем боковую коррекцию по lateralStiffness ─────────────────
+    //
+    //  Оригинал: queuedForce.fma(lateralVel * -0.6 * touchingFriction * strengthMul * timeStep, sideD)
+    //  Мы перехватываем второй вызов fma (ordinal=1) и умножаем коэффициент на lateralStiffness/0.6:
+    //    lateralStiffness=0.0 → factor=0  → нет боковой коррекции (дрифт)
+    //    lateralStiffness=0.6 → factor без изменений
+    //    lateralStiffness=1.0 → коррекция ×1.67 (цепкая резина)
+    //    lateralStiffness=2.0 → коррекция ×3.33 (трактор)
+
+    @Redirect(
+            method = "sable$physicsTick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lorg/joml/Vector3d;fma(DLorg/joml/Vector3dc;)Lorg/joml/Vector3d;",
+                    ordinal = 1
+            ),
+            remap = false
+    )
+    private Vector3d bigtires$scaleLateralCorrection(Vector3d instance, double factor, Vector3dc vec) {
+        final ItemStack item = getHeldItem();
+        if (!item.isEmpty()) {
+            final TirePhysicsData physics = item.get(BigTiresComponents.TIRE_PHYSICS);
+            if (physics != null) {
+                return instance.fma(factor / 0.6 * physics.lateralStiffness(), vec);
+            }
+        }
+        return instance.fma(factor, vec);
+    }
+
+    // ── 5. TirePhysics — только когда колесо касается земли
 
     @Inject(
             method = "sable$physicsTick",

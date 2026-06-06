@@ -7,10 +7,17 @@
 	"item.bigtires.big_tractor_tire": "Neumático de tractor grande",
 	"item.bigtires.tractor_tire": "Neumático de tractor",
 	"item.bigtires.truck_tire": "Neumático de camión",
+	"item.bigtires.narrow_truck_tire": "Neumático de camión estrecho",
 	"item.bigtires.small_truck_tire": "Neumático de camión pequeño",
 	"item.bigtires.monster_jam_tire": "Neumático de monster truck",
 	"item.bigtires.bamboo_tire": "Neumático de bambú",
 	"item.bigtires.vintage_tire": "Neumático clásico",
 	"block.bigtires.motorcycle_wheel_suspension": "Suspensión de rueda de motocicleta",
-	"block.bigtires.fixed_wheel_mount": "Soporte de rueda fijo"
+	"block.bigtires.fixed_wheel_mount": "Soporte de rueda fijo",
+	"item.bigtires.drift_tire": "Neumático de deriva",
+	"item.bigtires.wooden_wheel": "Rueda de madera",
+	"item.bigtires.wheel_wrench": "Llave para ruedas",
+	"item.bigtires.wheel_wrench.tooltip": "Haz clic derecho en un soporte de rueda para voltear el neumático",
+	"item.bigtires.wheel_wrench.flipped": "Neumático volteado",
+	"item.bigtires.wheel_wrench.unflipped": "Neumático en su posición original"
 }
