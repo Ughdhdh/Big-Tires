@@ -3,6 +3,7 @@ package ughdhdh.bigtires.index;
 import ughdhdh.bigtires.BigTires;
 import ughdhdh.bigtires.physics.BuoyantTireData;
 import ughdhdh.bigtires.physics.TirePhysicsData;
+import com.mojang.serialization.Codec;
 import foundry.veil.platform.registry.RegistrationProvider;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
@@ -30,6 +31,14 @@ public class BigTiresComponents {
      */
     public static final DataComponentType<BuoyantTireData> BUOYANCY =
             create("buoyancy", b -> b.persistent(BuoyantTireData.CODEC));
+
+    /**
+     * Флип колеса (зеркальное отражение по Z-оси).
+     * Присутствие компонента означает перевёрнутое колесо; отсутствие — нормальное.
+     * Устанавливается гаечным ключом (WheelWrenchItem).
+     */
+    public static final DataComponentType<Boolean> FLIPPED =
+            create("flipped", b -> b.persistent(Codec.BOOL));
 
     private static <T> DataComponentType<T> create(
             final String name,

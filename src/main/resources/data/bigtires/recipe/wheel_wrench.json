@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "SI ",
+    "  I"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "create:iron_sheet"
+    }
+  },
+  "result": {
+    "id": "bigtires:wheel_wrench",
+    "count": 1
+  }
+}

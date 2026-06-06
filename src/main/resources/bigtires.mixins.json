@@ -6,6 +6,8 @@
   "mixins": [
     "MixinWheelMountBlockEntity"
   ],
-  "client": [],
+  "client": [
+    "MixinWheelMountRenderer"
+  ],
   "injectors": { "defaultRequire": 1 }
 }

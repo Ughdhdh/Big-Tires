@@ -2,6 +2,7 @@ package ughdhdh.bigtires.index;
 
 import com.simibubi.create.foundation.data.AssetLookup;
 import ughdhdh.bigtires.BigTires;
+import ughdhdh.bigtires.item.WheelWrenchItem;
 import ughdhdh.bigtires.physics.BigTireLikes;
 import ughdhdh.bigtires.physics.BuoyantTireData;
 import ughdhdh.bigtires.physics.TirePhysicsData;
@@ -104,6 +105,11 @@ public class BigTiresItems {
                         .component(OffroadDataComponents.TIRE,      BigTireLikes.DRIFT_TIRE)
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.DRIFT))
                 .model(AssetLookup.itemModelWithPartials()).register();
+
+        // ── Wheel Wrench ──────────────────────────────────────────────────────
+        REGISTRATE.item("wheel_wrench", WheelWrenchItem::new)
+                .model((ctx, prov) -> prov.handheld(ctx::getEntry))
+                .register();
     }
 
     public static void init() {}

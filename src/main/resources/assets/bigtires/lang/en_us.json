@@ -12,5 +12,9 @@
 	"item.bigtires.monster_jam_tire": "Monster Jam Tire",
 	"item.bigtires.bamboo_tire": "Bamboo Tire",
 	"item.bigtires.vintage_tire": "Vintage Tire",
-	"item.bigtires.drift_tire": "Drift Tire"
+	"item.bigtires.drift_tire": "Drift Tire",
+	"item.bigtires.wheel_wrench": "Wheel Wrench",
+	"item.bigtires.wheel_wrench.tooltip": "Right-click a Wheel Mount to flip the tire",
+	"item.bigtires.wheel_wrench.flipped": "Tire flipped",
+	"item.bigtires.wheel_wrench.unflipped": "Tire unflipped"
 }
