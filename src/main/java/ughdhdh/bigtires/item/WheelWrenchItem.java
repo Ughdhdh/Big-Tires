@@ -18,11 +18,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.List;
 
-/**
- * Гаечный ключ BigTires.
- * ПКМ по любому WheelMount переворачивает (flip по оси X) модель установленного колеса.
- * Состояние хранится в компоненте FLIPPED на ItemStack шины.
- */
 public class WheelWrenchItem extends Item {
 
     public WheelWrenchItem(Properties properties) {

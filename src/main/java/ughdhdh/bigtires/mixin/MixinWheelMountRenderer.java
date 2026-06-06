@@ -19,9 +19,9 @@ import dev.ryanhcode.offroad.index.OffroadDataComponents;
 public class MixinWheelMountRenderer {
 
     private void applyFlip(PoseStack poseStack, Vec3 offset) {
-        // 2. поворот
+        // 1. поворот
         poseStack.mulPose(Axis.ZP.rotationDegrees(180.0f));
-        // 3. возвращаемся обратно (двойной обратный offset)
+        // 2. возвращаемся обратно (двойной обратный offset)
         poseStack.translate(offset.x*2, 0, 0);
     }
 

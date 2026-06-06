@@ -14,7 +14,7 @@
 	"item.bigtires.vintage_tire": "Винтажное колесо",
 	"item.bigtires.drift_tire": "Колесо для дрифта",
 	"item.bigtires.wheel_wrench": "Гаечный ключ",
-	"item.bigtires.wheel_wrench.tooltip": "ПКМ по Wheel Mount для переворота колеса",
-	"item.bigtires.wheel_wrench.flipped": "Колесо перевёрнуто",
+	"item.bigtires.wheel_wrench.tooltip": "ПКМ по Wheel Mount для отражения колеса",
+	"item.bigtires.wheel_wrench.flipped": "Колесо отражено",
 	"item.bigtires.wheel_wrench.unflipped": "Колесо возвращено"
 }

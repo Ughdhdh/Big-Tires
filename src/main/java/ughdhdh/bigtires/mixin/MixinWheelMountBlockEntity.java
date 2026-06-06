@@ -38,7 +38,7 @@ public abstract class MixinWheelMountBlockEntity {
     @Shadow
     public abstract ItemStack getHeldItem();
 
-    // ── 1. Buoyancy — HEAD ────────────────────────────────────────────────────
+    // ── 1. Buoyancy
 
     @Inject(
             method = "sable$physicsTick",
@@ -61,7 +61,7 @@ public abstract class MixinWheelMountBlockEntity {
         queuedWheelMounts.add(self);
     }
 
-    // ── 2. Extend raycast and initial value for large tires ───────────────────
+    // ── 2. Extend raycast and initial value for large tires
 
     @Redirect(
             method = "computeMaxExtensionToTerrain",
@@ -95,7 +95,7 @@ public abstract class MixinWheelMountBlockEntity {
         return original;
     }
 
-    // ── 3. Fix liftoff for large tires ────────────────────────────────────────
+    // ── 3. Fix liftoff for large tires
 
     @ModifyVariable(
             method = "sable$physicsTick",
@@ -152,7 +152,7 @@ public abstract class MixinWheelMountBlockEntity {
         return instance.fma(factor, vec);
     }
 
-    // ── 5. TirePhysics — только когда колесо касается земли ──────────────────
+    // ── 5. TirePhysics — только когда колесо касается земли
 
     @Inject(
             method = "sable$physicsTick",

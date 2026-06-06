@@ -18,6 +18,7 @@ import net.minecraft.world.phys.Vec3;
  *   "display" -> "gui" -> "translation": [Xpx, Ypx, 0]   (in pixels)
  *                          "scale": [s, s, s]              (icon size)
  */
+
 public class BigTireLikes {
 
     public static final TireLike HUGE_TIRE =

@@ -12,5 +12,9 @@
 	"item.bigtires.monster_jam_tire": "Колѣсо автомобиля-гиганта",
 	"item.bigtires.bamboo_tire": "Бамбуковое колѣсо",
 	"item.bigtires.vintage_tire": "Старинное колѣсо",
-	"item.bigtires.drift_tire": "Скользкое колѣсо"
+	"item.bigtires.drift_tire": "Скользкое колѣсо",
+	"item.bigtires.wheel_wrench": "Гаечный ключ",
+	"item.bigtires.wheel_wrench.tooltip": "ПКМ по Wheel Mount для отражѣнiя колѣса",
+	"item.bigtires.wheel_wrench.flipped": "Колѣсо отражѣно",
+	"item.bigtires.wheel_wrench.unflipped": "Колѣсо возвращено"
 }
