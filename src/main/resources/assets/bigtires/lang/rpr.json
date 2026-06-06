@@ -11,5 +11,6 @@
 	"item.bigtires.monster_jam_tire": "Колѣсо автомобиля-гиганта",
 	"item.bigtires.bamboo_tire": "Бамбуковое колѣсо",
 	"item.bigtires.vintage_tire": "Старинное колѣсо",
-	"block.bigtires.motorcycle_wheel_suspension": "Motorcycle Wheel Suspension"
+	"block.bigtires.motorcycle_wheel_suspension": "Motorcycle Wheel Suspension",
+	"block.bigtires.fixed_wheel_mount": "Fixed Wheel Mount"
 }
