@@ -72,4 +72,8 @@ public class BigTireLikes {
     public static final TireLike DRIFT_TIRE =
             new TireLike(0.76f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
                     BigTires.path("item/drift_tire/block"));
+
+    public static final TireLike WOODEN_WHEEL =
+            new TireLike(1.5f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
+                    BigTires.path("item/wooden_wheel/block"));
 }

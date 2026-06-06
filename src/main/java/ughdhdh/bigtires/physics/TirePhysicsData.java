@@ -12,6 +12,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  *  rollingResistance — passive drag (limits top speed)
  *  lateralStiffness  — side grip (< 1.0 = drift, > 1.0 = rigid)
  */
+
+        //lateralStiffness=0.0 → factor=0  → нет боковой коррекции (дрифт)
+        //    lateralStiffness=0.6 → factor без изменений
+        //    lateralStiffness=1.0 → коррекция ×1.67 (цепкая резина)
+        //    lateralStiffness=2.0 → коррекция ×3.33 (трактор)
+
+
 public record TirePhysicsData(
         float grip,
         float driveForce,
@@ -38,5 +45,6 @@ public record TirePhysicsData(
     public static final TirePhysicsData BAMBOO       = new TirePhysicsData(0.85f, 0.9f, 0.55f, 0.45f);
     public static final TirePhysicsData VINTAGE      = new TirePhysicsData(1.0f, 0.95f, 0.5f, 0.35f);
     public static final TirePhysicsData DRIFT        = new TirePhysicsData(0.1f, 1.7f, 0.05f, 0.15f);
+    public static final TirePhysicsData WOODEN       = new TirePhysicsData(1.0f, 1.0f, 0.45f, 0.6f);
 
 }

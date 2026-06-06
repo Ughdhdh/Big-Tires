@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "create:iron_sheet"
+    },
+    "W": {
+      "tag": "minecraft:stripped_log"
+    },
+    "S": {
+      "tag": "create:shaft"
+    }
+  },
+  "pattern": [
+    "WWW",
+    "ISI",
+    "WWW"
+  ],
+  "result": {
+    "count": 2,
+    "id": "bigtires:wooden_wheel"
+  }
+}

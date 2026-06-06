@@ -4,7 +4,7 @@
   "pattern": [
     " S ",
     "SI ",
-    "  I"
+    "  N"
   ],
   "key": {
     "I": {
@@ -12,6 +12,9 @@
     },
     "S": {
       "item": "create:iron_sheet"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
     }
   },
   "result": {

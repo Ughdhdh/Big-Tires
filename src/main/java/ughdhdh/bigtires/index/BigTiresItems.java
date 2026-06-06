@@ -106,6 +106,13 @@ public class BigTiresItems {
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.DRIFT))
                 .model(AssetLookup.itemModelWithPartials()).register();
 
+        // ── Wooden Wheel 1.5x1.5x0.5───────────────────────────────────────────
+        REGISTRATE.item("wooden_wheel", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.WOODEN_WHEEL)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.WOODEN))
+                .model(AssetLookup.itemModelWithPartials()).register();
+
         // ── Wheel Wrench ──────────────────────────────────────────────────────
         REGISTRATE.item("wheel_wrench", WheelWrenchItem::new)
                 .model((ctx, prov) -> prov.handheld(ctx::getEntry))
