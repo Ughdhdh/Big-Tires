@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "bigtires:block/motorcycle_wheel_suspension/block"
+    },
+    "facing=east": {
+      "model": "bigtires:block/motorcycle_wheel_suspension/block",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "bigtires:block/motorcycle_wheel_suspension/block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "bigtires:block/motorcycle_wheel_suspension/block",
+      "y": 270
+    }
+  }
+}

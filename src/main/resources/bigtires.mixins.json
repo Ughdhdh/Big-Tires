@@ -4,7 +4,8 @@
   "package": "ughdhdh.bigtires.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MixinWheelMountBlockEntity"
+    "MixinWheelMountBlockEntity",
+    "MixinWheelMountValueBox"
   ],
   "client": [
     "MixinWheelMountRenderer"
