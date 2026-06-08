@@ -20,7 +20,9 @@ import org.joml.Vector3d;
 
 public class BigTiresPhysics {
 
-    // ── TirePhysics ───────────────────────────────────────────────────────────
+    // ── TirePhysics (стандартный WheelMount) ─────────────────────────────────
+    // fwdD  = ось вала (вдоль facing)      = направление БОКОВОГО скольжения
+    // sideD = перпендикуляр к оси          = направление КАЧЕНИЯ
 
     public static void applyTirePhysics(
             final WheelMountBlockEntity be,
@@ -39,7 +41,6 @@ public class BigTiresPhysics {
 
         final Vector3d localPos3d = new Vector3d(localPos.x, localPos.y, localPos.z);
 
-        // Скорость — передаём отдельный dest чтобы localPos3d не мутировался
         final Vector3d worldVelocity = new Vector3d();
         Sable.HELPER.getVelocity(level, subLevel, localPos3d, worldVelocity);
         final Vector3d localVelocity = pose.transformNormalInverse(new Vector3d(worldVelocity));
@@ -48,12 +49,10 @@ public class BigTiresPhysics {
         final Vec3i fwdNormal  = Direction.get(Direction.AxisDirection.POSITIVE, axis).getNormal();
         final Vec3i sideNormal = new Vec3i(fwdNormal.getZ(), 0, fwdNormal.getX());
 
-        // Направления уже в локальном пространстве субуровня — не трансформируем
         final Vector3d localFwdD  = new Vector3d(fwdNormal.getX(),  0, fwdNormal.getZ()).normalize();
         final Vector3d localSideD = new Vector3d(sideNormal.getX(), 0, sideNormal.getZ()).normalize();
 
-        // Тяга — только ДОПОЛНИТЕЛЬНАЯ сверх оригинальной (driveForce=1.0 → ничего не добавляем)
-        // Оригинал уже применяет kineticSpeed * 1.75, мы добавляем (driveForce-1.0) * 1.75
+        // Тяга — сверх оригинала, вдоль направления качения (sideD)
         final float kineticSpeed = axis == Direction.Axis.X ? be.getSpeed() : -be.getSpeed();
         final double driveExtra = data.driveForce() - 1.0;
         if (Math.abs(kineticSpeed) > 0.01f && Math.abs(driveExtra) > 0.01) {
@@ -61,16 +60,14 @@ public class BigTiresPhysics {
                     new Vector3d(localSideD).mul(kineticSpeed * driveExtra * 1.75 * timeStep));
         }
 
-        // Сопротивление качению — дополнительное торможение сверх базового
+        // Сопротивление качению — вдоль направления качения (sideD)
         if (data.rollingResistance() > 0.01f) {
             final double rollVel = localVelocity.dot(localSideD);
             out.applyImpulseAtPoint(subLevel, localPos3d,
                     new Vector3d(localSideD).mul(rollVel * -data.rollingResistance() * timeStep * 3.0));
         }
 
-        // Дрифт — активное боковое скольжение при низком lateralStiffness
-        // Боковая КОРРЕКЦИЯ оригинала уже масштабирована через @Redirect в миксине
-        // Здесь добавляем активный занос: чем выше скорость вперёд и ниже stiffness — тем сильнее занос
+        // Дрифт — активный занос при низком lateralStiffness
         final float stiffness = data.lateralStiffness();
         final double driftFactor = 1.0 - Math.min(1.0, stiffness);
         if (driftFactor > 0.01) {
@@ -78,6 +75,73 @@ public class BigTiresPhysics {
             final double forwardVel  = localVelocity.dot(localSideD);
             out.applyImpulseAtPoint(subLevel, localPos3d,
                     new Vector3d(localFwdD).mul(
+                            Math.signum(lateralVel) * Math.abs(forwardVel) * driftFactor * 0.7 * timeStep
+                    ));
+        }
+    }
+
+    // ── MotorcycleTirePhysics ─────────────────────────────────────────────────
+    // Колесо катится ВДОЛЬ facing (как в реальности для мотоциклетной вилки).
+    // fwdD  = направление facing = направление КАЧЕНИЯ колеса
+    // sideD = перпендикуляр      = направление БОКОВОГО скольжения
+    //
+    // Боковая коррекция offroad'а (sideD у offroad = perpendicular to shaft)
+    // для NORTH-facing мотоцикла = EAST направление = наш боковой sideD ✓
+    // — она остаётся корректной и масштабируется Mixin'ом bigtires$scaleLateralCorrection.
+
+    public static void applyMotorcycleTirePhysics(
+            final WheelMountBlockEntity be,
+            final ServerSubLevel subLevel,
+            final RigidBodyHandle handle,
+            final double timeStep,
+            final TirePhysicsData data,
+            final ForceTotal out
+    ) {
+        final Level level = be.getLevel();
+        if (level == null) return;
+
+        final Direction facing = be.getBlockState().getValue(WheelMountBlock.HORIZONTAL_FACING);
+        final net.minecraft.world.phys.Vec3 localPos = be.getBlockPos().relative(facing).getCenter();
+        final Pose3dc pose = subLevel.logicalPose();
+
+        final Vector3d localPos3d = new Vector3d(localPos.x, localPos.y, localPos.z);
+
+        final Vector3d worldVelocity = new Vector3d();
+        Sable.HELPER.getVelocity(level, subLevel, localPos3d, worldVelocity);
+        final Vector3d localVelocity = pose.transformNormalInverse(new Vector3d(worldVelocity));
+
+        final Direction.Axis axis = facing.getAxis();
+        final Vec3i fwdNormal  = Direction.get(Direction.AxisDirection.POSITIVE, axis).getNormal();
+        final Vec3i sideNormal = new Vec3i(fwdNormal.getZ(), 0, fwdNormal.getX());
+
+        // fwdD = facing direction = rolling direction for motorcycle
+        // sideD = perpendicular   = lateral slip direction for motorcycle
+        final Vector3d localFwdD  = new Vector3d(fwdNormal.getX(),  0, fwdNormal.getZ()).normalize();
+        final Vector3d localSideD = new Vector3d(sideNormal.getX(), 0, sideNormal.getZ()).normalize();
+
+        // Тяга — вдоль направления QUALITY (fwdD = facing)
+        final float kineticSpeed = axis == Direction.Axis.X ? be.getSpeed() : -be.getSpeed();
+        final double driveExtra = data.driveForce() - 1.0;
+        if (Math.abs(kineticSpeed) > 0.01f && Math.abs(driveExtra) > 0.01) {
+            out.applyImpulseAtPoint(subLevel, localPos3d,
+                    new Vector3d(localFwdD).mul(kineticSpeed * driveExtra * 1.75 * timeStep));
+        }
+
+        // Сопротивление качению — вдоль направления качения (fwdD = facing)
+        if (data.rollingResistance() > 0.01f) {
+            final double rollVel = localVelocity.dot(localFwdD);
+            out.applyImpulseAtPoint(subLevel, localPos3d,
+                    new Vector3d(localFwdD).mul(rollVel * -data.rollingResistance() * timeStep * 3.0));
+        }
+
+        // Дрифт — боковое скольжение (sideD = перпендикуляр facing = реальный бок)
+        final float stiffness = data.lateralStiffness();
+        final double driftFactor = 1.0 - Math.min(1.0, stiffness);
+        if (driftFactor > 0.01) {
+            final double lateralVel = localVelocity.dot(localSideD);
+            final double forwardVel = localVelocity.dot(localFwdD);
+            out.applyImpulseAtPoint(subLevel, localPos3d,
+                    new Vector3d(localSideD).mul(
                             Math.signum(lateralVel) * Math.abs(forwardVel) * driftFactor * 0.7 * timeStep
                     ));
         }
@@ -125,21 +189,17 @@ public class BigTiresPhysics {
         if (inverseMass <= 0.0) inverseMass = 1.0 / subLevel.getMassTracker().getMass();
         if (inverseMass <= 0.0) return;
 
-        // Подъёмная сила
         final double buoyForce = data.buoyancy() * submersion * 9.81 / inverseMass * timeStep * 3.5;
         final Vector3d localUp = pose.transformNormalInverse(new Vector3d(0, buoyForce, 0));
         out.applyImpulseAtPoint(subLevel, localPos3d, localUp);
 
-        // Скорость (отдельный dest — не мутируем localPos3d)
         final Vector3d worldVelocity = new Vector3d();
         Sable.HELPER.getVelocity(level, subLevel, localPos3d, worldVelocity);
 
-        // Вертикальное сопротивление
         final Vector3d vertDrag = pose.transformNormalInverse(
                 new Vector3d(0, -worldVelocity.y * submersion * 10.0 * timeStep, 0));
         out.applyImpulseAtPoint(subLevel, localPos3d, vertDrag);
 
-        // Горизонтальное сопротивление
         final Vector3d horizDrag = pose.transformNormalInverse(
                 new Vector3d(
                         -worldVelocity.x * submersion * 10.0 * timeStep,
@@ -148,7 +208,6 @@ public class BigTiresPhysics {
                 ));
         out.applyImpulseAtPoint(subLevel, localPos3d, horizDrag);
 
-        // Тяга лопастей (paddle force работала правильно — не трогаем)
         final float speed = be.getSpeed();
         if (Math.abs(speed) > 0.01f) {
             final Direction.Axis axis = facing.getAxis();

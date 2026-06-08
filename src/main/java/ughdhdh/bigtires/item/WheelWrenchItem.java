@@ -2,7 +2,6 @@ package ughdhdh.bigtires.item;
 
 import ughdhdh.bigtires.index.BigTiresComponents;
 import dev.ryanhcode.offroad.content.blocks.wheel_mount.WheelMountBlockEntity;
-import dev.ryanhcode.offroad.index.OffroadDataComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -11,12 +10,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-
-import java.util.List;
 
 public class WheelWrenchItem extends Item {
 
@@ -36,7 +32,7 @@ public class WheelWrenchItem extends Item {
         }
 
         ItemStack tireStack = wheelMount.getHeldItem();
-        if (tireStack.isEmpty() || tireStack.get(OffroadDataComponents.TIRE) == null) {
+        if (tireStack.isEmpty()) {
             return InteractionResult.PASS;
         }
 
@@ -63,18 +59,11 @@ public class WheelWrenchItem extends Item {
         if (player != null) {
             player.displayClientMessage(
                     Component.translatable(wasFlipped
-                            ? "item.bigtires.wheel_wrench.unflipped"
-                            : "item.bigtires.wheel_wrench.flipped"),
+                            ? "item.bigtires.wheel_wrench.flipped"
+                            : "item.bigtires.wheel_wrench.unflipped"),
                     true);
         }
 
         return InteractionResult.CONSUME;
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context,
-                                List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-        tooltipComponents.add(Component.translatable("item.bigtires.wheel_wrench.tooltip"));
     }
 }

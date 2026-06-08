@@ -17,7 +17,9 @@
 	"item.bigtires.drift_tire": "Колесо для дрифта",
 	"item.bigtires.wooden_wheel": "Деревянное колесо",
 	"item.bigtires.wheel_wrench": "Гаечный ключ",
-	"item.bigtires.wheel_wrench.tooltip": "ПКМ по Wheel Mount для отражения колеса",
+	"item.bigtires.wheel_wrench.tooltip.summary": "Переворачивает внешний вид предметов, установленных на Wheel Mount.",
+	"item.bigtires.wheel_wrench.tooltip.condition1": "При использовании на Wheel Mount",
+	"item.bigtires.wheel_wrench.tooltip.behaviour1": "Отражает установленный предмет на _180°_ вокруг вертикальной оси",
 	"item.bigtires.wheel_wrench.flipped": "Колесо отражено",
 	"item.bigtires.wheel_wrench.unflipped": "Колесо возвращено"
 }

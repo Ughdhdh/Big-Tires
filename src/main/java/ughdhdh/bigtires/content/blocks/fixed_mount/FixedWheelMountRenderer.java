@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import ughdhdh.bigtires.index.BigTiresComponents;
 
 /**
  * Рендерер Fixed Wheel Mount.
@@ -96,8 +97,15 @@ public class FixedWheelMountRenderer
             if (tireLike.model().isPresent()) {
                 final SuperByteBuffer wheel = CachedBuffers.partial(
                         PartialModel.of(tireLike.model().get()), state);
-                wheel.light(light).translate(-0.5f, 0f, -0.5f).renderInto(ms, vb);
+                wheel.light(light).translate(-0.5f, 0f, -0.5f);
+                if (Boolean.TRUE.equals(itemStack.get(BigTiresComponents.FLIPPED))) {
+                    ms.mulPose(Axis.ZP.rotationDegrees(180.0f));
+                }
+                wheel.renderInto(ms, vb);
             } else {
+                if (Boolean.TRUE.equals(itemStack.get(BigTiresComponents.FLIPPED))) {
+                    ms.mulPose(Axis.ZP.rotationDegrees(180.0f));
+                }
                 Minecraft.getInstance().getItemRenderer().renderStatic(
                         itemStack, ItemDisplayContext.NONE,
                         light, overlay, ms, buffer, be.getLevel(), 0);
