@@ -40,14 +40,11 @@ public class MotorcycleWheelSuspensionRenderer
                 buffer.getBuffer(getRenderType(be, state)), light);
 
         final VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
-
-        // direction = противоположная facing: после rotateYDegrees локальный +Z
-        // указывает в сторону facing (туда, где находится колесо)
         final Direction direction = be.getBlockState()
                 .getValue(BlockStateProperties.HORIZONTAL_FACING)
                 .getOpposite();
 
-        // ── Главный поворот по facing (без лишних -90° на весь фрейм!) ────────
+        // ── Главный поворот по facing (без глобального -90°Y!) ───────────────
         ms.pushPose();
         TransformStack.of(ms)
                 .center()
@@ -58,47 +55,44 @@ public class MotorcycleWheelSuspensionRenderer
         final ItemStack itemStack = be.getHeldItem();
         final TireLike tireLike = itemStack.get(OffroadDataComponents.TIRE);
 
-        // ── Динамическая горизонтальная позиция ──────────────────────────────
-        // Центр колеса = radius + 1 блок от лицевой части маунта.
-        // Лицевая часть на 0.5 блока от центра блока → от центра = radius + 1.5.
-        // Формула позиции: F1_Z = 0.5 - H_WHEEL → H_WHEEL = radius + 1.5
+        // Центр колеса = radius + 1 блок от лицевой части
+        // Лицевая часть на 0.5 блока от центра блока
+        // F1_Z = 0.5 - H_WHEEL  =>  H_WHEEL = radius + 1.5
         final double H_WHEEL = (tireLike != null)
                 ? tireLike.radius() + 1.5
-                : 22.0 / 16.0; // дефолт без колеса = offroad-стандарт
+                : 22.0 / 16.0;
 
-        // Ход подвески: 0 = прижато, 0.65 = в воздухе
         final double verticalPos = -be.getLerpedExtension(partialTicks);
 
         ms.pushPose();
 
-        // Шаг 1: начальная позиция (до рулёжки и финального центрирования)
+        // Шаг 1: начальный translate к позиции колеса
         ms.translate(0.0, verticalPos, 26.0 / 16.0 - H_WHEEL);
 
-        // ── Рулёжка: поворот вокруг основания вилки ──────────────────────────
+        // Рулёжка
         final float pivotZ = (float) (-H_WHEEL + 6.0 / 16.0);
         ms.translate(0.5, 0.5, 0.5);
         ms.rotateAround(
                 Axis.YP.rotation((float) be.getLerpedYaw(partialTicks)),
                 0.0F, 0.0F, pivotZ);
-        ms.translate(-0.5, -0.5, -0.5); // ← без этого центрирование сломано
+        ms.translate(-0.5, -0.5, -0.5); // ← критически важно: без него смещение
 
-        // ── Переход к центру колеса (стандарт как в offroad) ─────────────────
+        // Переход к оси колеса (стандарт offroad)
         ms.translate(0.5, 0.5, 0.5);
         ms.translate(0.0, 0.0, -26.0f / 16.0f);
 
-        // ── Ориентация для мотоциклетного колеса ─────────────────────────────
-        // Применяем ЗДЕСЬ (у центра колеса, не глобально!):
-        //   • колесо становится параллельно лицевой части маунта
-        //   • ось вращения для анимации катания становится корректной
+        // ── -90°Y ЗДЕСЬ (у центра колеса, не глобально!) ────────────────────
+        // Ориентирует колесо параллельно лицевой части маунта.
+        // Применяется ДО спина → задаёт правильную ось вращения.
         ms.mulPose(Axis.YP.rotationDegrees(-90f));
 
-        // ── Вращение колеса ───────────────────────────────────────────────────
+        // Вращение колеса
         final double wheelAngle = -be.getLerpedAngle(partialTicks)
                 * (direction.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1.0 : -1.0)
                 * (direction.getAxis() == Direction.Axis.X ? 1.0 : -1.0);
         ms.mulPose(Axis.ZP.rotation((float) wheelAngle));
 
-        // ── Рендер шины ───────────────────────────────────────────────────────
+        // Рендер шины
         if (tireLike != null) {
             final var rot = tireLike.rotation();
             ms.mulPose(Axis.XP.rotation((float) Math.toRadians(rot.x)));
@@ -112,11 +106,17 @@ public class MotorcycleWheelSuspensionRenderer
                 wheel.light(light).translate(-0.5f, 0f, -0.5f);
                 if (Boolean.TRUE.equals(itemStack.get(BigTiresComponents.FLIPPED))) {
                     ms.mulPose(Axis.ZP.rotationDegrees(180.0f));
+                    if (itemStack.has(BigTiresComponents.TIRE_PHYSICS)) {
+                        ms.translate(1, 0, 0);
+                    }
                 }
                 wheel.renderInto(ms, vb);
             } else {
                 if (Boolean.TRUE.equals(itemStack.get(BigTiresComponents.FLIPPED))) {
                     ms.mulPose(Axis.ZP.rotationDegrees(180.0f));
+                    if (itemStack.has(BigTiresComponents.TIRE_PHYSICS)) {
+                        ms.translate(1, 0, 0);
+                    }
                 }
                 Minecraft.getInstance().getItemRenderer().renderStatic(
                         itemStack, ItemDisplayContext.NONE,
@@ -124,8 +124,8 @@ public class MotorcycleWheelSuspensionRenderer
             }
         }
 
-        ms.popPose(); // позиция колеса
-        ms.popPose(); // главный поворот
+        ms.popPose();
+        ms.popPose();
     }
 
     @Override

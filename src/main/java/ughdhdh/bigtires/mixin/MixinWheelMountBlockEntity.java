@@ -175,11 +175,7 @@ public abstract class MixinWheelMountBlockEntity {
         final TirePhysicsData physics = item.get(BigTiresComponents.TIRE_PHYSICS);
         if (physics == null) return;
 
-        // Мотоциклетный маунт: колесо катится ВДОЛЬ facing (перпендикулярно вилке)
-        if (self instanceof ughdhdh.bigtires.content.blocks.motorcycle_suspension.MotorcycleWheelSuspensionBlockEntity) {
-            BigTiresPhysics.applyMotorcycleTirePhysics(self, subLevel, handle, timeStep, physics, forceTotal);
-        } else {
-            BigTiresPhysics.applyTirePhysics(self, subLevel, handle, timeStep, physics, forceTotal);
-        }
+        // Один метод для всех WheelMount (стандарт + motorcycle + fixed).
+        BigTiresPhysics.applyTirePhysics(self, subLevel, handle, timeStep, physics, forceTotal);
     }
 }

@@ -119,7 +119,6 @@ public class BigTiresPhysics {
         final Vector3d localFwdD  = new Vector3d(fwdNormal.getX(),  0, fwdNormal.getZ()).normalize();
         final Vector3d localSideD = new Vector3d(sideNormal.getX(), 0, sideNormal.getZ()).normalize();
 
-        // Тяга — вдоль направления QUALITY (fwdD = facing)
         final float kineticSpeed = axis == Direction.Axis.X ? be.getSpeed() : -be.getSpeed();
         final double driveExtra = data.driveForce() - 1.0;
         if (Math.abs(kineticSpeed) > 0.01f && Math.abs(driveExtra) > 0.01) {

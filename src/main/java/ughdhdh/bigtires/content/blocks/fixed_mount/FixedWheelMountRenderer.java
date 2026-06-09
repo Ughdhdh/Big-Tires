@@ -100,11 +100,17 @@ public class FixedWheelMountRenderer
                 wheel.light(light).translate(-0.5f, 0f, -0.5f);
                 if (Boolean.TRUE.equals(itemStack.get(BigTiresComponents.FLIPPED))) {
                     ms.mulPose(Axis.ZP.rotationDegrees(180.0f));
+                    if (itemStack.has(BigTiresComponents.TIRE_PHYSICS)) {
+                        ms.translate(1, 0, 0);
+                    }
                 }
                 wheel.renderInto(ms, vb);
             } else {
                 if (Boolean.TRUE.equals(itemStack.get(BigTiresComponents.FLIPPED))) {
                     ms.mulPose(Axis.ZP.rotationDegrees(180.0f));
+                    if (itemStack.has(BigTiresComponents.TIRE_PHYSICS)) {
+                        ms.translate(1, 0, 0);
+                    }
                 }
                 Minecraft.getInstance().getItemRenderer().renderStatic(
                         itemStack, ItemDisplayContext.NONE,

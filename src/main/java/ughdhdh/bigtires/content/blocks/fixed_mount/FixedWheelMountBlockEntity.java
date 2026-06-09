@@ -1,24 +1,27 @@
 package ughdhdh.bigtires.content.blocks.fixed_mount;
 
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
 import dev.ryanhcode.offroad.content.blocks.wheel_mount.WheelMountBlockEntity;
-import dev.ryanhcode.sable.api.physics.handle.RigidBodyHandle;
-import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * BlockEntity для Fixed Wheel Mount.
  *
- * Отличия от WheelMountBlockEntity:
- *  1. addBehaviours пуст — нет виджета настройки жёсткости подвески
- *  2. sable$physicsTick пуст — нет пружинных/демпферных сил
- *  3. getLerpedExtension всегда 0 — колесо не двигается по Y
- *
- * Тяговые/боковые силы применяются отдельно через BigTiresCommonEvents.
+ * Поведение:
+ *  • addBehaviours: вызывает super во временный список, чтобы инициализировать
+ *    приватное поле this.strength (иначе sable$physicsTick падает с NPE).
+ *    Устанавливает жёсткость пружины на максимум → нет пружинистости.
+ *    Не добавляет поведение в реальный список → нет UI-виджета.
+ *  • sable$physicsTick: не переопределяется — родительский метод работает нормально.
+ *    Пружина поддерживает транспорт над землёй, но с макс. жёсткостью — без отскока.
+ *  • getLerpedExtension: всегда 0 — визуально колесо не двигается.
+ *  • getLerpedYaw: поднят до public для рендерера.
  */
 public class FixedWheelMountBlockEntity extends WheelMountBlockEntity {
 
@@ -26,42 +29,33 @@ public class FixedWheelMountBlockEntity extends WheelMountBlockEntity {
         super(type, pos, state);
     }
 
-    /**
-     * Поднимаем getLerpedYaw до public — рендерер в другом пакете
-     * не может обратиться к protected методу напрямую.
-     */
-    @Override
-    public double getLerpedYaw(double partialTick) {
-        return super.getLerpedYaw(partialTick);
-    }
-
-    /**
-     * Убираем виджет настройки жёсткости —
-     * у фиксированного маунта нет амортизации.
-     */
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-        // Намеренно пусто: не вызываем super,
-        // чтобы не добавлять SuspensionStrengthValueBehaviour.
+        // Инициализируем this.strength через super, но в отдельный список.
+        // Без этого sable$physicsTick обращается к null и падает с NPE.
+        final List<BlockEntityBehaviour> temp = new ArrayList<>();
+        super.addBehaviours(temp);
+
+        // Устанавливаем максимальную жёсткость пружины — нет пружинистости.
+        // SuspensionStrengthValueBehaviour наследует ScrollValueBehaviour.
+        //for (BlockEntityBehaviour b : temp) {
+        //    if (b instanceof ScrollValueBehaviour scroll) {
+        //        scroll.setValue(scroll.maxValue);
+        //   }
+        //}
+
+        // НЕ добавляем в реальный список → нет UI-виджета жёсткости.
     }
 
-    /**
-     * Нет пружины: колесо жёстко закреплено.
-     * BigTiresCommonEvents всё равно применит тяговые/боковые силы
-     * через свой отдельный хук (instanceof WheelMountBlockEntity проходит).
-     */
-    @Override
-    public void sable$physicsTick(ServerSubLevel subLevel,
-                                  RigidBodyHandle handle,
-                                  double timeStep) {
-        // Намеренно пусто: пружина и демпфер не применяются.
-    }
-
-    /**
-     * Колесо всегда в нейтральной позиции (нет хода подвески).
-     */
+    /** Колесо визуально всегда в нейтральной позиции. */
     @Override
     public double getLerpedExtension(float partialTick) {
         return 0.0;
+    }
+
+    /** Поднимаем getLerpedYaw до public для рендерера (другой пакет). */
+    @Override
+    public double getLerpedYaw(double partialTick) {
+        return super.getLerpedYaw(partialTick);
     }
 }

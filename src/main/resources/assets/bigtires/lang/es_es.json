@@ -21,5 +21,5 @@
 	"item.bigtires.wheel_wrench.tooltip.condition1": "When used on a Wheel Mount",
 	"item.bigtires.wheel_wrench.tooltip.behaviour1": "Flips the mounted item _180°_ around its vertical axis",
 	"item.bigtires.wheel_wrench.flipped": "Neumático volteado",
-	"item.bigtires.wheel_wrench.unflipped": "Neumático en su posición original"
+	"item.bigtires.wheel_wrench.unflipped": "Neumático volteado"
 }

@@ -11,6 +11,7 @@ import ughdhdh.bigtires.content.blocks.motorcycle_suspension.MotorcycleWheelSusp
 
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
+@SuppressWarnings("removal")
 public class BigTiresBlocks {
 
     private static final SimulatedRegistrate REGISTRATE = BigTires.getRegistrate();
