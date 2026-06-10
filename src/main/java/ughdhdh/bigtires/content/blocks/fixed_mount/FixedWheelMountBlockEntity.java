@@ -31,20 +31,15 @@ public class FixedWheelMountBlockEntity extends WheelMountBlockEntity {
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-        // Инициализируем this.strength через super, но в отдельный список.
-        // Без этого sable$physicsTick обращается к null и падает с NPE.
         final List<BlockEntityBehaviour> temp = new ArrayList<>();
         super.addBehaviours(temp);
-
-        // Устанавливаем максимальную жёсткость пружины — нет пружинистости.
-        // SuspensionStrengthValueBehaviour наследует ScrollValueBehaviour.
-        //for (BlockEntityBehaviour b : temp) {
-        //    if (b instanceof ScrollValueBehaviour scroll) {
-        //        scroll.setValue(scroll.maxValue);
-        //   }
-        //}
-
-        // НЕ добавляем в реальный список → нет UI-виджета жёсткости.
+        // Устанавливаем жёсткость = 360 напрямую (maxValue=180, setValue обрежет,
+        // но field.value можно выставить выше — как сам offroad делает strength.value=10)
+        for (BlockEntityBehaviour b : temp) {
+            if (b instanceof ScrollValueBehaviour scroll) {
+                scroll.value = 1000;
+            }
+        }
     }
 
     /** Колесо визуально всегда в нейтральной позиции. */
