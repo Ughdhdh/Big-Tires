@@ -41,7 +41,7 @@ public abstract class MixinWheelMountBlockEntity {
 
     @Shadow public abstract ItemStack getHeldItem();
 
-    // ── 1. Buoyancy ───────────────────────────────────────────────────────────
+    // ── 1. Buoyancy
 
     @Inject(method = "sable$physicsTick", at = @At("HEAD"))
     private void bigtires$applyBuoyancy(
@@ -61,7 +61,7 @@ public abstract class MixinWheelMountBlockEntity {
         queuedWheelMounts.add(self);
     }
 
-    // ── 2. Extend raycast for large tires ─────────────────────────────────────
+    // ── 2. Extend raycast for large tires
 
     @Redirect(
             method = "computeMaxExtensionToTerrain",
@@ -95,7 +95,7 @@ public abstract class MixinWheelMountBlockEntity {
         return original;
     }
 
-    // ── 3. Fix liftoff for large tires ────────────────────────────────────────
+    // ── 3. Fix for large tires
 
     @ModifyVariable(
             method = "sable$physicsTick",
@@ -123,15 +123,7 @@ public abstract class MixinWheelMountBlockEntity {
         return maxExtension;
     }
 
-    // ── 4a. Drive/braking axis (ordinal=0) ────────────────────────────────────
-    //
-    //  offroad: queuedForce.fma(factor, normalD)
-    //    factor = трение торможения от localVelocity.dot(normalD) + kineticSpeed*surfaceBraking*1.75*dt
-    //    normalD = направление качения для СТАНДАРТНОГО маунта (перпендикуляр валу)
-    //
-    //  Для мотоцикла качение происходит вдоль facing (= sideD_offroad, ось вала).
-    //  factor НЕ трогаем — в нём уже корректно учтены touchingFriction/strengthMul/RPM,
-    //  просто применяем его к другой оси.
+    // ── 4a. Drive/braking axis (ordinal=0)
 
     @Redirect(
             method = "sable$physicsTick",
@@ -153,14 +145,7 @@ public abstract class MixinWheelMountBlockEntity {
         return instance.fma(factor, normalD);
     }
 
-    // ── 4b. Lateral grip axis (ordinal=1) + lateralStiffness scaling ───────────
-    //
-    //  offroad: queuedForce.fma(localVelocity.dot(sideD) * -0.6 * touchingFriction
-    //                            * strengthMul * timeStep, sideD)
-    //    sideD = ось вала = боковое скольжение для СТАНДАРТНОГО маунта
-    //
-    //  Для мотоцикла боковое скольжение — перпендикуляр facing (= normalD_offroad).
-    //  Также масштабируем factor по lateralStiffness предмета (для всех маунтов).
+    // ── 4b. Lateral grip axis
 
     @Redirect(
             method = "sable$physicsTick",
@@ -191,8 +176,6 @@ public abstract class MixinWheelMountBlockEntity {
         return instance.fma(scaledFactor, sideD);
     }
 
-    // ── Вспомогательные векторы (как offroad getRotatedWheelAxis) ──────────────
-
     private Vector3dc bigtires$sideD(WheelMountBlockEntity self) {
         final Direction facing = self.getBlockState().getValue(WheelMountBlock.HORIZONTAL_FACING);
         final Vec3i normal = Direction.get(Direction.AxisDirection.POSITIVE, facing.getAxis()).getNormal();
@@ -209,8 +192,6 @@ public abstract class MixinWheelMountBlockEntity {
         v.rotateY(chasingYaw);
         return v;
     }
-
-    // ── 5. Дополнительная физика шины (бонус сверх базовой offroad-физики) ─────
 
     @Inject(
             method = "sable$physicsTick",

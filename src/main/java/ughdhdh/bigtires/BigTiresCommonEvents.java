@@ -13,7 +13,6 @@ import dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem;
 public class BigTiresCommonEvents {
 
     public static void physicsTick(final SubLevelPhysicsSystem physicsSystem, final double timeStep) {
-        // Reserved. If force batching is needed (analogous to
-        // WheelMountBlockEntity.applyAllBatchedForces) — implement here.
+
     }
 }

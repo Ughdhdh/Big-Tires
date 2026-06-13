@@ -18,6 +18,8 @@ public class FixedWheelMountBlock extends WheelMountBlock {
 
     @Override
     public BlockEntityType<? extends WheelMountBlockEntity> getBlockEntityType() {
-        return BigTiresBlockEntityTypes.FIXED_WHEEL_MOUNT.get();
+        // ВРЕМЕННО ОТКЛЮЧЕНО — BigTiresBlockEntityTypes.FIXED_WHEEL_MOUNT не зарегистрирован
+        throw new UnsupportedOperationException("FixedWheelMount is temporarily disabled");
+        // return BigTiresBlockEntityTypes.FIXED_WHEEL_MOUNT.get();
     }
 }

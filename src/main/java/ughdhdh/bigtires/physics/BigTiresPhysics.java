@@ -20,13 +20,7 @@ import org.joml.Vector3d;
 
 public class BigTiresPhysics {
 
-    // ── TirePhysics (стандартный WheelMount) ─────────────────────────────────
-    //  Дополняет базовую offroad-физику (которая уже корректно применяет
-    //  кинетическую тягу/трение к колесу). Здесь — только ЭКСТРА-эффекты
-    //  от TirePhysicsData: driveForce-бонус, rollingResistance, drift.
-    //
-    //  fwdD  = ось вала (боковое скольжение для стандарта)
-    //  sideD = перпендикуляр к валу (качение для стандарта)
+    // ── TirePhysics
 
     public static void applyTirePhysics(
             final WheelMountBlockEntity be,
@@ -60,7 +54,7 @@ public class BigTiresPhysics {
         final Vector3d sideD = new Vector3d(normal2.getX(), 0, normal2.getZ());
         sideD.rotateY(chasingYaw);
 
-        // Тяга-бонус — вдоль направления качения (sideD)
+        // Тяга-бонус
         final float kineticSpeed = axis == Direction.Axis.X ? be.getSpeed() : -be.getSpeed();
         final double driveExtra = data.driveForce() - 1.0;
         if (Math.abs(kineticSpeed) > 0.01f && Math.abs(driveExtra) > 0.01) {
@@ -68,14 +62,14 @@ public class BigTiresPhysics {
                     new Vector3d(sideD).mul(kineticSpeed * driveExtra * 1.75 * timeStep));
         }
 
-        // Сопротивление качению — вдоль направления качения (sideD)
+        // Сопротивление качению
         if (data.rollingResistance() > 0.01f) {
             final double rollVel = localVelocity.dot(sideD);
             out.applyImpulseAtPoint(subLevel, localPos3d,
                     new Vector3d(sideD).mul(rollVel * -data.rollingResistance() * timeStep * 3.0));
         }
 
-        // Дрифт — боковое скольжение (fwdD = ось вала)
+        // Дрифт
         final float stiffness = data.lateralStiffness();
         final double driftFactor = 1.0 - Math.min(1.0, stiffness);
         if (driftFactor > 0.01) {
@@ -89,14 +83,6 @@ public class BigTiresPhysics {
     }
 
     // ── MotorcycleTirePhysics ─────────────────────────────────────────────────
-    //  Базовая офроад-физика теперь редиректнута на правильные оси через Mixin
-    //  (см. bigtires$redirectDriveAxis / bigtires$redirectLateralAxis).
-    //  Этот метод добавляет ТОЛЬКО ЭКСТРА-эффекты от TirePhysicsData.
-    //
-    //  fwdD  = направление facing (качение мотоцикла)        — соответствует
-    //          sideD_offroad из Mixin (та же ось!)
-    //  sideD = перпендикуляр facing (боковое скольжение)     — соответствует
-    //          normalD_offroad из Mixin
 
     public static void applyMotorcycleTirePhysics(
             final WheelMountBlockEntity be,
@@ -124,15 +110,14 @@ public class BigTiresPhysics {
         final Vec3i normal  = Direction.get(Direction.AxisDirection.POSITIVE, axis).getNormal();
         final Vec3i normal2 = new Vec3i(normal.getZ(), 0, normal.getX());
 
-        // fwdD = направление facing → качение мотоцикла (= sideD_offroad из Mixin)
+
         final Vector3d fwdD = new Vector3d(normal.getX(), 0, normal.getZ());
         fwdD.rotateY(chasingYaw);
 
-        // sideD = перпендикуляр facing → боковое скольжение (= normalD_offroad из Mixin)
         final Vector3d sideD = new Vector3d(normal2.getX(), 0, normal2.getZ());
         sideD.rotateY(chasingYaw);
 
-        // Тяга-бонус — вдоль fwdD (качение)
+        // Тяга-бонус
         final float kineticSpeed = axis == Direction.Axis.X ? be.getSpeed() : -be.getSpeed();
         final double driveExtra = data.driveForce() - 1.0;
         if (Math.abs(kineticSpeed) > 0.01f && Math.abs(driveExtra) > 0.01) {
@@ -140,7 +125,7 @@ public class BigTiresPhysics {
                     new Vector3d(fwdD).mul(kineticSpeed * driveExtra * 1.75 * timeStep));
         }
 
-        // Сопротивление качению — вдоль fwdD
+        // Сопротивление качению
         if (data.rollingResistance() > 0.01f) {
             final double rollVel = localVelocity.dot(fwdD);
             out.applyImpulseAtPoint(subLevel, localPos3d,
@@ -160,7 +145,7 @@ public class BigTiresPhysics {
         }
     }
 
-    // ── Buoyancy (без изменений) ────────────────────────────────────────────
+    // ── Buoyancy
 
     public static void applyBuoyancy(
             final WheelMountBlockEntity be,

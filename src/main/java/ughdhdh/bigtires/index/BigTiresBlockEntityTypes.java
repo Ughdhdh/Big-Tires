@@ -13,25 +13,25 @@ public class BigTiresBlockEntityTypes {
 
     private static final SimulatedRegistrate REGISTRATE = BigTires.getRegistrate();
 
-    // ── Motorcycle Wheel Mount
-    public static final BlockEntityEntry<MotorcycleWheelMountBlockEntity> MOTORCYCLE_WHEEL_MOUNT =
-        REGISTRATE.blockEntity("motorcycle_wheel_mount",
-                MotorcycleWheelMountBlockEntity::new)
-            .onRegister(SimInventoryService.INSTANCE
-                .registerInventory((be, dir) -> be.getInventory()))
-            .validBlocks(BigTiresBlocks.MOTORCYCLE_WHEEL_MOUNT)
-            .renderer(() -> MotorcycleWheelMountRenderer::new)
-            .register();
-
-    // ── Fixed Wheel Mount
-    public static final BlockEntityEntry<FixedWheelMountBlockEntity> FIXED_WHEEL_MOUNT =
-        REGISTRATE.blockEntity("fixed_wheel_mount",
-                FixedWheelMountBlockEntity::new)
-            .onRegister(SimInventoryService.INSTANCE
-                .registerInventory((be, dir) -> be.getInventory()))
-            .validBlocks(BigTiresBlocks.FIXED_WHEEL_MOUNT)
-            .renderer(() -> FixedWheelMountRenderer::new)
-            .register();
+//    // ── Motorcycle Wheel Mount
+//    public static final BlockEntityEntry<MotorcycleWheelMountBlockEntity> MOTORCYCLE_WHEEL_MOUNT =
+//        REGISTRATE.blockEntity("motorcycle_wheel_mount",
+//                MotorcycleWheelMountBlockEntity::new)
+//            .onRegister(SimInventoryService.INSTANCE
+//                .registerInventory((be, dir) -> be.getInventory()))
+//            .validBlocks(BigTiresBlocks.MOTORCYCLE_WHEEL_MOUNT)
+//            .renderer(() -> MotorcycleWheelMountRenderer::new)
+//            .register();
+//
+//    // ── Fixed Wheel Mount
+//    public static final BlockEntityEntry<FixedWheelMountBlockEntity> FIXED_WHEEL_MOUNT =
+//        REGISTRATE.blockEntity("fixed_wheel_mount",
+//                FixedWheelMountBlockEntity::new)
+//            .onRegister(SimInventoryService.INSTANCE
+//                .registerInventory((be, dir) -> be.getInventory()))
+//            .validBlocks(BigTiresBlocks.FIXED_WHEEL_MOUNT)
+//            .renderer(() -> FixedWheelMountRenderer::new)
+//            .register();
 
     public static void init() {}
 }

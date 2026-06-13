@@ -6,13 +6,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-/**
- * Сдвигает окно регулировки силы подвески на 2 пикселя влево.
- *
- * SuspensionStrengthValueBox создаётся как new SuspensionStrengthValueBox(hOffset).
- * По умолчанию hOffset=0 (X=8 в voxel space).
- * Меняем на hOffset=-2 (X=6) — два пикселя влево.
- */
 @Mixin(value = WheelMountBlockEntity.class, remap = false)
 public abstract class MixinWheelMountValueBox {
 
@@ -27,10 +20,10 @@ public abstract class MixinWheelMountValueBox {
             remap = false
     )
     private int bigtires$moveValueBoxLeft(int original) {
-        // Только для мотоциклетного маунта, -3 пикселя
+        // для мотоциклетного маунта
         if ((Object)this instanceof MotorcycleWheelMountBlockEntity) {
             return original - 3;
         }
-        return original; // остальные WheelMount — без изменений
+        return original;
     }
 }
