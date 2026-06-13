@@ -21,8 +21,12 @@ import org.joml.Vector3d;
 public class BigTiresPhysics {
 
     // ── TirePhysics (стандартный WheelMount) ─────────────────────────────────
-    // fwdD  = ось вала (вдоль facing)      = направление БОКОВОГО скольжения
-    // sideD = перпендикуляр к оси          = направление КАЧЕНИЯ
+    //  Дополняет базовую offroad-физику (которая уже корректно применяет
+    //  кинетическую тягу/трение к колесу). Здесь — только ЭКСТРА-эффекты
+    //  от TirePhysicsData: driveForce-бонус, rollingResistance, drift.
+    //
+    //  fwdD  = ось вала (боковое скольжение для стандарта)
+    //  sideD = перпендикуляр к валу (качение для стандарта)
 
     public static void applyTirePhysics(
             final WheelMountBlockEntity be,
@@ -30,7 +34,8 @@ public class BigTiresPhysics {
             final RigidBodyHandle handle,
             final double timeStep,
             final TirePhysicsData data,
-            final ForceTotal out
+            final ForceTotal out,
+            final double chasingYaw
     ) {
         final Level level = be.getLevel();
         if (level == null) return;
@@ -46,48 +51,52 @@ public class BigTiresPhysics {
         final Vector3d localVelocity = pose.transformNormalInverse(new Vector3d(worldVelocity));
 
         final Direction.Axis axis = facing.getAxis();
-        final Vec3i fwdNormal  = Direction.get(Direction.AxisDirection.POSITIVE, axis).getNormal();
-        final Vec3i sideNormal = new Vec3i(fwdNormal.getZ(), 0, fwdNormal.getX());
+        final Vec3i normal  = Direction.get(Direction.AxisDirection.POSITIVE, axis).getNormal();
+        final Vec3i normal2 = new Vec3i(normal.getZ(), 0, normal.getX());
 
-        final Vector3d localFwdD  = new Vector3d(fwdNormal.getX(),  0, fwdNormal.getZ()).normalize();
-        final Vector3d localSideD = new Vector3d(sideNormal.getX(), 0, sideNormal.getZ()).normalize();
+        final Vector3d fwdD = new Vector3d(normal.getX(), 0, normal.getZ());
+        fwdD.rotateY(chasingYaw);
 
-        // Тяга — сверх оригинала, вдоль направления качения (sideD)
+        final Vector3d sideD = new Vector3d(normal2.getX(), 0, normal2.getZ());
+        sideD.rotateY(chasingYaw);
+
+        // Тяга-бонус — вдоль направления качения (sideD)
         final float kineticSpeed = axis == Direction.Axis.X ? be.getSpeed() : -be.getSpeed();
         final double driveExtra = data.driveForce() - 1.0;
         if (Math.abs(kineticSpeed) > 0.01f && Math.abs(driveExtra) > 0.01) {
             out.applyImpulseAtPoint(subLevel, localPos3d,
-                    new Vector3d(localSideD).mul(kineticSpeed * driveExtra * 1.75 * timeStep));
+                    new Vector3d(sideD).mul(kineticSpeed * driveExtra * 1.75 * timeStep));
         }
 
         // Сопротивление качению — вдоль направления качения (sideD)
         if (data.rollingResistance() > 0.01f) {
-            final double rollVel = localVelocity.dot(localSideD);
+            final double rollVel = localVelocity.dot(sideD);
             out.applyImpulseAtPoint(subLevel, localPos3d,
-                    new Vector3d(localSideD).mul(rollVel * -data.rollingResistance() * timeStep * 3.0));
+                    new Vector3d(sideD).mul(rollVel * -data.rollingResistance() * timeStep * 3.0));
         }
 
-        // Дрифт — активный занос при низком lateralStiffness
+        // Дрифт — боковое скольжение (fwdD = ось вала)
         final float stiffness = data.lateralStiffness();
         final double driftFactor = 1.0 - Math.min(1.0, stiffness);
         if (driftFactor > 0.01) {
-            final double lateralVel = localVelocity.dot(localFwdD);
-            final double forwardVel  = localVelocity.dot(localSideD);
+            final double lateralVel = localVelocity.dot(fwdD);
+            final double forwardVel = localVelocity.dot(sideD);
             out.applyImpulseAtPoint(subLevel, localPos3d,
-                    new Vector3d(localFwdD).mul(
+                    new Vector3d(fwdD).mul(
                             Math.signum(lateralVel) * Math.abs(forwardVel) * driftFactor * 0.7 * timeStep
                     ));
         }
     }
 
     // ── MotorcycleTirePhysics ─────────────────────────────────────────────────
-    // Колесо катится ВДОЛЬ facing (как в реальности для мотоциклетной вилки).
-    // fwdD  = направление facing = направление КАЧЕНИЯ колеса
-    // sideD = перпендикуляр      = направление БОКОВОГО скольжения
+    //  Базовая офроад-физика теперь редиректнута на правильные оси через Mixin
+    //  (см. bigtires$redirectDriveAxis / bigtires$redirectLateralAxis).
+    //  Этот метод добавляет ТОЛЬКО ЭКСТРА-эффекты от TirePhysicsData.
     //
-    // Боковая коррекция offroad'а (sideD у offroad = perpendicular to shaft)
-    // для NORTH-facing мотоцикла = EAST направление = наш боковой sideD ✓
-    // — она остаётся корректной и масштабируется Mixin'ом bigtires$scaleLateralCorrection.
+    //  fwdD  = направление facing (качение мотоцикла)        — соответствует
+    //          sideD_offroad из Mixin (та же ось!)
+    //  sideD = перпендикуляр facing (боковое скольжение)     — соответствует
+    //          normalD_offroad из Mixin
 
     public static void applyMotorcycleTirePhysics(
             final WheelMountBlockEntity be,
@@ -95,7 +104,8 @@ public class BigTiresPhysics {
             final RigidBodyHandle handle,
             final double timeStep,
             final TirePhysicsData data,
-            final ForceTotal out
+            final ForceTotal out,
+            final double chasingYaw
     ) {
         final Level level = be.getLevel();
         if (level == null) return;
@@ -111,42 +121,46 @@ public class BigTiresPhysics {
         final Vector3d localVelocity = pose.transformNormalInverse(new Vector3d(worldVelocity));
 
         final Direction.Axis axis = facing.getAxis();
-        final Vec3i fwdNormal  = Direction.get(Direction.AxisDirection.POSITIVE, axis).getNormal();
-        final Vec3i sideNormal = new Vec3i(fwdNormal.getZ(), 0, fwdNormal.getX());
+        final Vec3i normal  = Direction.get(Direction.AxisDirection.POSITIVE, axis).getNormal();
+        final Vec3i normal2 = new Vec3i(normal.getZ(), 0, normal.getX());
 
-        // fwdD = facing direction = rolling direction for motorcycle
-        // sideD = perpendicular   = lateral slip direction for motorcycle
-        final Vector3d localFwdD  = new Vector3d(fwdNormal.getX(),  0, fwdNormal.getZ()).normalize();
-        final Vector3d localSideD = new Vector3d(sideNormal.getX(), 0, sideNormal.getZ()).normalize();
+        // fwdD = направление facing → качение мотоцикла (= sideD_offroad из Mixin)
+        final Vector3d fwdD = new Vector3d(normal.getX(), 0, normal.getZ());
+        fwdD.rotateY(chasingYaw);
 
+        // sideD = перпендикуляр facing → боковое скольжение (= normalD_offroad из Mixin)
+        final Vector3d sideD = new Vector3d(normal2.getX(), 0, normal2.getZ());
+        sideD.rotateY(chasingYaw);
+
+        // Тяга-бонус — вдоль fwdD (качение)
         final float kineticSpeed = axis == Direction.Axis.X ? be.getSpeed() : -be.getSpeed();
         final double driveExtra = data.driveForce() - 1.0;
         if (Math.abs(kineticSpeed) > 0.01f && Math.abs(driveExtra) > 0.01) {
             out.applyImpulseAtPoint(subLevel, localPos3d,
-                    new Vector3d(localFwdD).mul(kineticSpeed * driveExtra * 1.75 * timeStep));
+                    new Vector3d(fwdD).mul(kineticSpeed * driveExtra * 1.75 * timeStep));
         }
 
-        // Сопротивление качению — вдоль направления качения (fwdD = facing)
+        // Сопротивление качению — вдоль fwdD
         if (data.rollingResistance() > 0.01f) {
-            final double rollVel = localVelocity.dot(localFwdD);
+            final double rollVel = localVelocity.dot(fwdD);
             out.applyImpulseAtPoint(subLevel, localPos3d,
-                    new Vector3d(localFwdD).mul(rollVel * -data.rollingResistance() * timeStep * 3.0));
+                    new Vector3d(fwdD).mul(rollVel * -data.rollingResistance() * timeStep * 3.0));
         }
 
-        // Дрифт — боковое скольжение (sideD = перпендикуляр facing = реальный бок)
+        // Дрифт — боковое скольжение (sideD = перпендикуляр facing)
         final float stiffness = data.lateralStiffness();
         final double driftFactor = 1.0 - Math.min(1.0, stiffness);
         if (driftFactor > 0.01) {
-            final double lateralVel = localVelocity.dot(localSideD);
-            final double forwardVel = localVelocity.dot(localFwdD);
+            final double lateralVel = localVelocity.dot(sideD);
+            final double forwardVel = localVelocity.dot(fwdD);
             out.applyImpulseAtPoint(subLevel, localPos3d,
-                    new Vector3d(localSideD).mul(
+                    new Vector3d(sideD).mul(
                             Math.signum(lateralVel) * Math.abs(forwardVel) * driftFactor * 0.7 * timeStep
                     ));
         }
     }
 
-    // ── Buoyancy ──────────────────────────────────────────────────────────────
+    // ── Buoyancy (без изменений) ────────────────────────────────────────────
 
     public static void applyBuoyancy(
             final WheelMountBlockEntity be,

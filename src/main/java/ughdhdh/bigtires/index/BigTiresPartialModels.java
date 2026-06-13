@@ -4,7 +4,7 @@ import ughdhdh.bigtires.BigTires;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 
 /**
-        Flywheel PartialModels for all BigTires tires.
+ * Flywheel PartialModels for all BigTires tires.
  */
 
 public class BigTiresPartialModels {

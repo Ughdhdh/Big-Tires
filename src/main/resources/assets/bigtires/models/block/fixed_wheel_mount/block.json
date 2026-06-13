@@ -6,8 +6,8 @@
 		64
 	],
 	"textures": {
-		"0": "bigtires:block/fixed_wheelsuspension",
-		"particle": "bigtires:block/fixed_wheelsuspension"
+		"0": "bigtires:block/fixed_wheelmount",
+		"particle": "bigtires:block/fixed_wheelmount"
 	},
 	"elements": [
 		{

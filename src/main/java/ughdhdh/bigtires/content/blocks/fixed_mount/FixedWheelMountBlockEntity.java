@@ -33,8 +33,6 @@ public class FixedWheelMountBlockEntity extends WheelMountBlockEntity {
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         final List<BlockEntityBehaviour> temp = new ArrayList<>();
         super.addBehaviours(temp);
-        // Устанавливаем жёсткость = 360 напрямую (maxValue=180, setValue обрежет,
-        // но field.value можно выставить выше — как сам offroad делает strength.value=10)
         for (BlockEntityBehaviour b : temp) {
             if (b instanceof ScrollValueBehaviour scroll) {
                 scroll.value = 1000;
@@ -48,7 +46,6 @@ public class FixedWheelMountBlockEntity extends WheelMountBlockEntity {
         return 0.0;
     }
 
-    /** Поднимаем getLerpedYaw до public для рендерера (другой пакет). */
     @Override
     public double getLerpedYaw(double partialTick) {
         return super.getLerpedYaw(partialTick);

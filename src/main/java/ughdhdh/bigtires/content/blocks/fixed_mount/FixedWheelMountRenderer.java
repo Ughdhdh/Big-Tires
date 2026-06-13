@@ -28,13 +28,12 @@ import ughdhdh.bigtires.index.BigTiresComponents;
  *
  * Отличия от стандартного offroad WheelMountRenderer:
  *  • Нет анимации подвески (extension всегда 0)
- *  • Колесо на 0.5 блока выше (Y offset = +0.5 в начальном translate)
- *  • Нет рендера телескопа/пружины
+ *
  */
 public class FixedWheelMountRenderer
         extends KineticBlockEntityRenderer<FixedWheelMountBlockEntity> {
 
-    // Расстояние от центра блока до центра колеса (стандарт offroad)
+    // Расстояние от центра блока до центра колеса
     private static final double H_WHEEL = 22.0 / 16.0;
 
     public FixedWheelMountRenderer(BlockEntityRendererProvider.Context context) {
@@ -66,7 +65,7 @@ public class FixedWheelMountRenderer
 
         ms.translate(0.0, 0.0, 26.0 / 16.0 - H_WHEEL);
 
-        // Рулёжка (steering from redstone signal)
+        // Рулёжка
         final float pivotZ = (float) (-H_WHEEL + 6.0 / 16.0);
         ms.translate(0.5, 0.5, 0.5);
         ms.rotateAround(

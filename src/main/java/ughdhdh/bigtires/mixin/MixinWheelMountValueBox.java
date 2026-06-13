@@ -1,7 +1,7 @@
 package ughdhdh.bigtires.mixin;
 
 import dev.ryanhcode.offroad.content.blocks.wheel_mount.WheelMountBlockEntity;
-import ughdhdh.bigtires.content.blocks.motorcycle_suspension.MotorcycleWheelSuspensionBlockEntity;
+import ughdhdh.bigtires.content.blocks.motorcycle_mount.MotorcycleWheelMountBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -28,7 +28,7 @@ public abstract class MixinWheelMountValueBox {
     )
     private int bigtires$moveValueBoxLeft(int original) {
         // Только для мотоциклетного маунта, -3 пикселя
-        if ((Object)this instanceof MotorcycleWheelSuspensionBlockEntity) {
+        if ((Object)this instanceof MotorcycleWheelMountBlockEntity) {
             return original - 3;
         }
         return original; // остальные WheelMount — без изменений

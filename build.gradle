@@ -14,12 +14,6 @@ java {
 
 sourceSets.main.resources { srcDirs = ['src/main/resources', 'src/generated/resources'] }
 
-// ── Локальные JARы ──────────────────────────────────────────────────────────
-def aeronauticsJar   = file('libs/create-aeronautics-bundled-1.21.1-1.2.1.jar')
-def sableJar         = file('libs/sable-neoforge-1.21.1-1.2.2.jar')
-def offroadJar       = file('libs/dev.ryanhcode.offroad.offroad-neoforge-1.21.1-1.2.1.jar')
-def simulatedJar     = file('libs/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.2.1.jar')
-
 neoForge {
     version = neoforge_version
 
@@ -87,16 +81,16 @@ dependencies {
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
     implementation "io.github.llamalad7:mixinextras-neoforge:0.4.1"
 
-    // ── Зависимости из референса (Синтаксис и переменные сохранены) ───────────
+    // ── Зависимости из референса ───────────
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
     implementation("dev.ryanhcode.sable-companion:sable-companion-common-${minecraft_version}:${sable_companion_version}")
-    implementation("foundry.veil:veil-neoforge-${minecraft_version}:3.6.2")
+    implementation("foundry.veil:veil-neoforge-${minecraft_version}:4.1.4")
 
-    // ── Локальные JARы (как полноценные моды) ────────────────────────────────
-    implementation ':create-aeronautics-bundled-1.21.1-1.2.1'
-    implementation ':sable-neoforge-1.21.1-1.2.2'
-    implementation ':dev.ryanhcode.offroad.offroad-neoforge-1.21.1-1.2.1'
-    implementation ':dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.2.1'
+    // ── Локальные JARы────────────────────────────────
+    implementation ':create-aeronautics-bundled-1.21.1-1.3.0'
+    implementation ':sable-neoforge-1.21.1-2.0.0'
+    implementation ':dev.ryanhcode.offroad.offroad-neoforge-1.21.1-1.3.0'
+    implementation ':dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.0'
 }
 
 tasks.withType(JavaCompile).configureEach {

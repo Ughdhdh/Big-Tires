@@ -7,17 +7,16 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 import ughdhdh.bigtires.BigTires;
 import ughdhdh.bigtires.content.blocks.fixed_mount.FixedWheelMountBlock;
-import ughdhdh.bigtires.content.blocks.motorcycle_suspension.MotorcycleWheelSuspensionBlock;
+import ughdhdh.bigtires.content.blocks.motorcycle_mount.MotorcycleWheelMountBlock;
 
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
-@SuppressWarnings("removal")
 public class BigTiresBlocks {
 
     private static final SimulatedRegistrate REGISTRATE = BigTires.getRegistrate();
 
-    public static final BlockEntry<MotorcycleWheelSuspensionBlock> MOTORCYCLE_WHEEL_SUSPENSION =
-            REGISTRATE.block("motorcycle_wheel_suspension", MotorcycleWheelSuspensionBlock::new)
+    public static final BlockEntry<MotorcycleWheelMountBlock> MOTORCYCLE_WHEEL_MOUNT =
+            REGISTRATE.block("motorcycle_wheel_mount", MotorcycleWheelMountBlock::new)
                     .initialProperties(SharedProperties::softMetal)
                     .properties(p -> p
                             .mapColor(MapColor.COLOR_GRAY)

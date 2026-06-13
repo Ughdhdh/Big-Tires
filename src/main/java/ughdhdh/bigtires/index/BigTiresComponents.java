@@ -12,7 +12,6 @@ import java.util.function.UnaryOperator;
 
 /**
  * Analog of OffroadDataComponents — registers DataComponentType via Veil's RegistrationProvider.
- * Fields are stored directly as DataComponentType<T>, not as Supplier.
  */
 public class BigTiresComponents {
 
@@ -27,15 +26,14 @@ public class BigTiresComponents {
             create("tire_physics", b -> b.persistent(TirePhysicsData.CODEC));
 
     /**
-     * Buoyancy and paddling. Only on huge_rowing_tire and huge_rowing_wide_tire.
+     * Buoyancy and paddling.
      */
     public static final DataComponentType<BuoyantTireData> BUOYANCY =
             create("buoyancy", b -> b.persistent(BuoyantTireData.CODEC));
 
     /**
-     * Флип колеса (зеркальное отражение по Z-оси).
-     * Присутствие компонента означает перевёрнутое колесо; отсутствие — нормальное.
-     * Устанавливается гаечным ключом (WheelWrenchItem).
+     * Флип колеса.
+     * Присутствие компонента означает перевёрнутое колесо; отсутствие — нормальное..
      */
     public static final DataComponentType<Boolean> FLIPPED =
             create("flipped", b -> b.persistent(Codec.BOOL));
@@ -50,6 +48,6 @@ public class BigTiresComponents {
     }
 
     public static void init() {
-        // no-op — initializes the static fields above
+
     }
 }
