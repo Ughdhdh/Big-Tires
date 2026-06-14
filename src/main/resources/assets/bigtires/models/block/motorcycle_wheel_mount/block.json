@@ -6,8 +6,8 @@
 		64
 	],
 	"textures": {
-		"0": "bigtires:block/motorcycle_wheelmount",
-		"particle": "bigtires:block/motorcycle_wheelmount"
+		"0": "bigtires:block/motorcycle_wheel_mount",
+		"particle": "bigtires:block/motorcycle_wheel_mount"
 	},
 	"elements": [
 		{
