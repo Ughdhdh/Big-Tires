@@ -1,0 +1,11 @@
+{
+	"parent": "block/air",
+	"ambientocclusion": false,
+	"textures": {
+		"bamboo_wheel": "bigtires:block/bamboo_wheel",
+		"particle": "bigtires:block/bamboo_wheel"
+	},
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "bigtires:models/item/bamboo_wheel/bamboo_wheel.obj"
+}

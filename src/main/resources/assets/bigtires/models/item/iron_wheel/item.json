@@ -2,12 +2,12 @@
 	"parent": "block/air",
 	"ambientocclusion": false,
 	"textures": {
-		"bamboo_tire": "bigtires:block/bamboo_tire",
-		"particle": "bigtires:block/bamboo_tire"
+		"iron_wheel": "bigtires:block/iron_wheel",
+		"particle": "bigtires:block/iron_wheel"
 	},
 	"loader": "neoforge:obj",
 	"flip_v": true,
-	"model": "bigtires:models/item/bamboo_tire/bamboo_tire.obj",
+	"model": "bigtires:models/item/iron_wheel/iron_wheel.obj",
 	"display": {
 		"thirdperson_righthand": {
 			"rotation": [
@@ -21,9 +21,9 @@
 				0
 			],
 			"scale": [
-				0.35,
-				0.35,
-				0.35
+				0.6944,
+				0.6944,
+				0.6944
 			]
 		},
 		"thirdperson_lefthand": {
@@ -38,9 +38,9 @@
 				0
 			],
 			"scale": [
-				0.35,
-				0.35,
-				0.35
+				0.6944,
+				0.6944,
+				0.6944
 			]
 		},
 		"firstperson_righthand": {
@@ -50,9 +50,9 @@
 				0
 			],
 			"scale": [
-				0.35,
-				0.35,
-				0.35
+				0.6944,
+				0.6944,
+				0.6944
 			]
 		},
 		"firstperson_lefthand": {
@@ -62,9 +62,9 @@
 				0
 			],
 			"scale": [
-				0.35,
-				0.35,
-				0.35
+				0.6944,
+				0.6944,
+				0.6944
 			]
 		},
 		"ground": {
@@ -74,9 +74,9 @@
 				0
 			],
 			"scale": [
-				0.35,
-				0.35,
-				0.35
+				0.5208,
+				0.5208,
+				0.5208
 			]
 		},
 		"gui": {
@@ -86,14 +86,14 @@
 				0
 			],
 			"translation": [
-				-2.7,
+				-3.7,
 				0,
 				0
 			],
 			"scale": [
-				0.22,
-				0.22,
-				0.22
+				0.3,
+				0.3,
+				0.3
 			]
 		},
 		"fixed": {
@@ -108,9 +108,9 @@
 				0
 			],
 			"scale": [
-				0.35,
-				0.35,
-				0.35
+				0.6944,
+				0.6944,
+				0.6944
 			]
 		}
 	}

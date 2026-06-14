@@ -93,9 +93,9 @@ public class BigTiresItems {
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.MONSTER_JAM))
                 .model(AssetLookup.itemModelWithPartials()).register();
         // ── Bamboo Tire 4x4x1.5───────────────────────────────────────────
-        REGISTRATE.item("bamboo_tire", TireItem::new)
+        REGISTRATE.item("bamboo_wheel", TireItem::new)
                 .properties(x -> x
-                        .component(OffroadDataComponents.TIRE,      BigTireLikes.BAMBOO_TIRE)
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.BAMBOO_WHEEL)
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.BAMBOO)
                         .component(BigTiresComponents.BUOYANCY,     BuoyantTireData.BAMBOO))
                 .model(AssetLookup.itemModelWithPartials()).register();
@@ -111,6 +111,13 @@ public class BigTiresItems {
                 .properties(x -> x
                         .component(OffroadDataComponents.TIRE,      BigTireLikes.WOODEN_WHEEL)
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.WOODEN))
+                .model(AssetLookup.itemModelWithPartials()).register();
+
+        // ── Iron Wheel 1.5x1.5x0.7───────────────────────────────────────────
+        REGISTRATE.item("iron_wheel", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.IRON_WHEEL)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.IRON))
                 .model(AssetLookup.itemModelWithPartials()).register();
 
         // ── Wheel Wrench ──────────────────────────────────────────────────────

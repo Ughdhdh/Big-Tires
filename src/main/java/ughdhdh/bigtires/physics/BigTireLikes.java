@@ -61,9 +61,9 @@ public class BigTireLikes {
             new TireLike(2.5f, new Vec3(90,0,0), new Vec3(0.5, -0.05, 0.5),
                     BigTires.path("item/monster_jam_tire/block"));
 
-    public static final TireLike BAMBOO_TIRE =
+    public static final TireLike BAMBOO_WHEEL =
             new TireLike(1.95f, new Vec3(90,0,0), new Vec3(0.5, -0.4, 0.5),
-                    BigTires.path("item/bamboo_tire/block"));
+                    BigTires.path("item/bamboo_wheel/block"));
 
     public static final TireLike VINTAGE_TIRE =
             new TireLike(1.0f, new Vec3(90,0,0), new Vec3(0.5, 0.05, 0.5),
@@ -76,4 +76,8 @@ public class BigTireLikes {
     public static final TireLike WOODEN_WHEEL =
             new TireLike(1.5f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
                     BigTires.path("item/wooden_wheel/block"));
+
+    public static final TireLike IRON_WHEEL =
+            new TireLike(1.5f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
+                    BigTires.path("item/iron_wheel/block"));
 }

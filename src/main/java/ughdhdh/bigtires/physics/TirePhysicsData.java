@@ -43,8 +43,9 @@ public record TirePhysicsData(
     public static final TirePhysicsData SMALL_TRUCK  = new TirePhysicsData(1.0f, 1.2f, 0.4f, 0.85f);
     public static final TirePhysicsData MONSTER_JAM  = new TirePhysicsData(0.6f, 0.65f, 0.5f, 0.5f);
     public static final TirePhysicsData BAMBOO       = new TirePhysicsData(0.85f, 0.9f, 0.55f, 0.45f);
-    public static final TirePhysicsData VINTAGE      = new TirePhysicsData(1.0f, 0.95f, 0.5f, 0.35f);
+    public static final TirePhysicsData VINTAGE      = new TirePhysicsData(0.9f, 0.95f, 0.5f, 0.35f);
     public static final TirePhysicsData DRIFT        = new TirePhysicsData(0.1f, 1.7f, 0.05f, 0.15f);
-    public static final TirePhysicsData WOODEN       = new TirePhysicsData(1.0f, 1.0f, 0.45f, 0.6f);
+    public static final TirePhysicsData WOODEN       = new TirePhysicsData(1.0f, 1.0f, 0.45f, 0.5f);
+    public static final TirePhysicsData IRON         = new TirePhysicsData(0.9f, 0.9f, 0.2f, 0.6f);
 
 }
