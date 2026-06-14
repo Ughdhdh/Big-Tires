@@ -19,8 +19,6 @@ public class MotorcycleWheelMountBlock extends WheelMountBlock {
     // Сигнатура совместима: BlockEntityType<? extends WheelMountBlockEntity>.
     @Override
     public BlockEntityType<? extends WheelMountBlockEntity> getBlockEntityType() {
-        // ВРЕМЕННО ОТКЛЮЧЕНО — BigTiresBlockEntityTypes.MOTORCYCLE_WHEEL_MOUNT не зарегистрирован
-        throw new UnsupportedOperationException("MotorcycleWheelMount is temporarily disabled");
-        // return BigTiresBlockEntityTypes.MOTORCYCLE_WHEEL_MOUNT.get();
+        return BigTiresBlockEntityTypes.MOTORCYCLE_WHEEL_MOUNT.get();
     }
 }
