@@ -17,10 +17,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import ughdhdh.bigtires.WheelColorData;
+import ughdhdh.bigtires.client.WheelColorOverlayRegistry;
+import ughdhdh.bigtires.client.WheelColorRenderType;
 import ughdhdh.bigtires.index.BigTiresComponents;
 
 public class MotorcycleWheelMountRenderer
@@ -57,9 +61,7 @@ public class MotorcycleWheelMountRenderer
         // Центр колеса = radius + 1 блок от лицевой части
         // F1_Z = 0.5 - H_WHEEL  =>  H_WHEEL = radius + 1.5
         final double H_WHEEL = (tireLike != null)
-                ? tireLike.radius() + 1.5
-                : 22.0 / 16.0;
-
+                ? tireLike.radius() + 1.5 : 22.0 / 16.0;
         final double verticalPos = -be.getLerpedExtension(partialTicks);
 
         ms.pushPose();
@@ -73,12 +75,11 @@ public class MotorcycleWheelMountRenderer
         ms.rotateAround(
                 Axis.YP.rotation((float) be.getLerpedYaw(partialTicks)),
                 0.0F, 0.0F, pivotZ);
-        ms.translate(-0.5, -0.5, -0.5); // ← критически важно: без него смещение
+        ms.translate(-0.5, -0.5, -0.5);
 
         // Переход к оси колеса
         ms.translate(0.5, 0.5, 0.5);
         ms.translate(0.0, 0.0, -26.0f / 16.0f);
-
         ms.mulPose(Axis.YP.rotationDegrees(-90f));
 
         // Вращение колеса
@@ -99,13 +100,24 @@ public class MotorcycleWheelMountRenderer
                 final SuperByteBuffer wheel = CachedBuffers.partial(
                         PartialModel.of(tireLike.model().get()), state);
                 wheel.light(light).translate(-0.5f, 0f, -0.5f);
+
+                // Flip если нужно
                 if (Boolean.TRUE.equals(itemStack.get(BigTiresComponents.FLIPPED))) {
                     ms.mulPose(Axis.ZP.rotationDegrees(180.0f));
                     if (itemStack.has(BigTiresComponents.TIRE_PHYSICS)) {
                         ms.translate(1, 0, 0);
                     }
                 }
+
+                // Базовый рендер (оригинальные цвета, без тинта)
                 wheel.renderInto(ms, vb);
+
+                // Color overlays поверх базовой модели
+                WheelColorData colorData = itemStack.get(BigTiresComponents.WHEEL_COLOR);
+                if (colorData != null) {
+                    renderColorOverlays(ms, tireLike, colorData, state, light, buffer);
+                }
+
             } else {
                 if (Boolean.TRUE.equals(itemStack.get(BigTiresComponents.FLIPPED))) {
                     ms.mulPose(Axis.ZP.rotationDegrees(180.0f));
@@ -123,14 +135,46 @@ public class MotorcycleWheelMountRenderer
         ms.popPose();
     }
 
+    /**
+     * Рендерит два overlay-прохода поверх базовой модели:
+     * <ul>
+     *   <li>Tire overlay × {@code WHEEL_COLOR.tireColor()} — шейдер читает R-канал маски.</li>
+     *   <li>Rim overlay × {@code WHEEL_COLOR.rimColor()} — шейдер читает G-канал маски.</li>
+     * </ul>
+     * PoseStack уже содержит все трансформы основной модели (включая flip),
+     * поэтому overlays встают точно на то же место.
+     */
+    private static void renderColorOverlays(PoseStack ms, TireLike tireLike,
+                                            WheelColorData colorData, BlockState state,
+                                            int light, MultiBufferSource buffer) {
+        if (tireLike.model().isEmpty()) return;
+        ResourceLocation baseModelRL = tireLike.model().get();
+
+        PartialModel overlayModel = WheelColorOverlayRegistry.getOverlayModel(baseModelRL);
+        if (overlayModel == null) return;
+        ResourceLocation maskTexture = WheelColorOverlayRegistry.getMaskTexture(baseModelRL);
+        if (maskTexture == null) return;
+
+        // Tire overlay (R-канал маски)
+        SuperByteBuffer tireOv = CachedBuffers.partial(overlayModel, state);
+        tireOv.light(light).translate(-0.5f, 0f, -0.5f);
+        int tc = colorData.tireColor();
+        tireOv.color((tc >> 16) & 0xFF, (tc >> 8) & 0xFF, tc & 0xFF, 255);
+        tireOv.renderInto(ms, buffer.getBuffer(WheelColorRenderType.tire(maskTexture)));
+
+        // Rim overlay (G-канал маски)
+        SuperByteBuffer rimOv = CachedBuffers.partial(overlayModel, state);
+        rimOv.light(light).translate(-0.5f, 0f, -0.5f);
+        int rc = colorData.rimColor();
+        rimOv.color((rc >> 16) & 0xFF, (rc >> 8) & 0xFF, rc & 0xFF, 255);
+        rimOv.renderInto(ms, buffer.getBuffer(WheelColorRenderType.rim(maskTexture)));
+    }
+
     @Override
-    protected SuperByteBuffer getRotatedModel(MotorcycleWheelMountBlockEntity te,
-                                              BlockState state) {
+    protected SuperByteBuffer getRotatedModel(MotorcycleWheelMountBlockEntity te, BlockState state) {
         return CachedBuffers.partialFacing(
                 AllPartialModels.SHAFT_HALF, te.getBlockState(),
-                te.getBlockState()
-                        .getValue(BlockStateProperties.HORIZONTAL_FACING)
-                        .getOpposite());
+                te.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite());
     }
 
     @Override

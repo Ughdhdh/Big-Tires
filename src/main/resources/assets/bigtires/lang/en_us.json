@@ -21,5 +21,13 @@
 	"item.bigtires.wheel_wrench.tooltip.condition1": "When used on a Wheel Mount",
 	"item.bigtires.wheel_wrench.tooltip.behaviour1": "Flips the mounted item _180°_ around its vertical axis",
 	"item.bigtires.wheel_wrench.flipped": "Tire flipped",
-	"item.bigtires.wheel_wrench.unflipped": "Tire flipped"
+	"item.bigtires.wheel_wrench.unflipped": "Tire flipped",
+
+	"block.bigtires.wheel_dye_station": "Dye Station",
+	"gui.bigtires.wheel_dye_station.apply": "Apply",
+	"gui.bigtires.wheel_dye_station.reset": "Reset",
+	"gui.bigtires.wheel_dye_station.tire": "Tire",
+	"gui.bigtires.wheel_dye_station.rim": "Rim",
+	"gui.bigtires.wheel_dye_station.tire_color": "Tire Color:",
+	"gui.bigtires.wheel_dye_station.rim_color": "Rim Color:"
 }

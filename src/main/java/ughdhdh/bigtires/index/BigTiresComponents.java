@@ -1,6 +1,7 @@
 package ughdhdh.bigtires.index;
 
 import ughdhdh.bigtires.BigTires;
+import ughdhdh.bigtires.WheelColorData;
 import ughdhdh.bigtires.physics.BuoyantTireData;
 import ughdhdh.bigtires.physics.TirePhysicsData;
 import com.mojang.serialization.Codec;
@@ -37,6 +38,14 @@ public class BigTiresComponents {
      */
     public static final DataComponentType<Boolean> FLIPPED =
             create("flipped", b -> b.persistent(Codec.BOOL));
+
+    /**
+     * Цвет шины (резина) и диска (металл).
+     * Устанавливается в блоке WheelDyeStation с помощью красителей.
+     * tireColor и rimColor хранятся как 0xRRGGBB.
+     */
+    public static final DataComponentType<WheelColorData> WHEEL_COLOR =
+            create("wheel_color", b -> b.persistent(WheelColorData.CODEC));
 
     private static <T> DataComponentType<T> create(
             final String name,

@@ -3,8 +3,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "motorcycle_wheel_mount",
-		"particle": "motorcycle_wheel_mount"
+		"0": "bigtires:block/motorcycle_wheel_mount",
+		"particle": "bigtires:block/motorcycle_wheel_mount"
 	},
 	"elements": [
 		{
