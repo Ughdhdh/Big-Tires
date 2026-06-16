@@ -1,0 +1,11 @@
+{
+	"parent": "block/air",
+	"ambientocclusion": false,
+	"textures": {
+		"huge_wide_tire": "bigtires:block/huge_wide_tire_overlay",
+		"particle": "bigtires:block/huge_wide_tire"
+	},
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "bigtires:models/item/huge_wide_tire/huge_wide_tire.obj"
+}

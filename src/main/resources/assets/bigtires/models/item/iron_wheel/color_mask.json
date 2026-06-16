@@ -1,0 +1,11 @@
+{
+	"parent": "block/air",
+	"ambientocclusion": false,
+	"textures": {
+		"iron_wheel": "bigtires:block/iron_wheel_overlay",
+		"particle": "bigtires:block/iron_wheel"
+	},
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "bigtires:models/item/iron_wheel/iron_wheel.obj"
+}

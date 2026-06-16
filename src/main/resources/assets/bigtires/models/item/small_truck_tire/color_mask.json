@@ -1,0 +1,11 @@
+{
+	"parent": "block/air",
+	"ambientocclusion": false,
+	"textures": {
+		"small_truck_tire": "bigtires:block/small_truck_tire_overlay",
+		"particle": "bigtires:block/small_truck_tire"
+	},
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "bigtires:models/item/small_truck_tire/small_truck_tire.obj"
+}

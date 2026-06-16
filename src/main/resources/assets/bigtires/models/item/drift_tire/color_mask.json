@@ -1,0 +1,11 @@
+{
+	"parent": "block/air",
+	"ambientocclusion": false,
+	"textures": {
+		"drift_tire": "bigtires:block/drift_tire_overlay",
+		"particle":   "bigtires:block/drift_tire"
+	},
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "bigtires:models/item/drift_tire/drift_tire.obj"
+}
