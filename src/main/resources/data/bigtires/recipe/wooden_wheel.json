@@ -7,7 +7,7 @@
       "item": "create:iron_sheet"
     },
     "W": {
-      "tag": "minecraft:stripped_logs"
+      "tag": "c:stripped_logs"
     },
     "S": {
       "item": "create:shaft"

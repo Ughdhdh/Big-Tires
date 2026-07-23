@@ -7,17 +7,18 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ughdhdh.bigtires.WheelColorData;
 import ughdhdh.bigtires.client.WheelColorOverlayRegistry;
 import ughdhdh.bigtires.client.WheelColorRenderType;
 import ughdhdh.bigtires.index.BigTiresComponents;
@@ -29,38 +30,45 @@ import dev.ryanhcode.offroad.index.OffroadDataComponents;
 /**
  * Mixin в WheelMountRenderer (мод Offroad).
  * <p>
- * Добавляет два поведения при рендере колеса:
+ * <h3>Два раздельных пути рендера базовой шины в оригинальном коде Offroad</h3>
+ * Судя по реальному исходнику {@code WheelMountRenderer.renderSafe()}, шина
+ * рендерится ОДНИМ из двух взаимоисключающих способов:
  * <ol>
- *   <li><b>Flip</b> — отражение модели, если у предмета компонент {@code FLIPPED}.</li>
- *   <li><b>Color overlay</b> — два дополнительных прохода рендеринга поверх базовой модели:
- *     <ul>
- *       <li>tire overlay × {@code WHEEL_COLOR.tireColor()} (шейдер читает R-канал маски)</li>
- *       <li>rim overlay × {@code WHEEL_COLOR.rimColor()} (шейдер читает G-канал маски)</li>
- *     </ul>
- *   </li>
+ *   <li>{@code tireLike.model().isPresent()} → своя OBJ-модель через
+ *       {@code SuperByteBuffer.renderInto(...)} — этот путь используют колёса
+ *       BigTires (у них {@code TireLike.model()} явно задан в {@code BigTireLikes}).</li>
+ *   <li>{@code tireLike.model().isEmpty()} → ванильный
+ *       {@code ItemRenderer.renderStatic(...)} — этот путь используют СОБСТВЕННЫЕ
+ *       тайры Offroad (у них модель не заведена через {@code TireLike}, а
+ *       рендерится обычным способом item-модели).</li>
  * </ol>
- *
- * <h3>Архитектура инъекций</h3>
- * <ul>
- *   <li>{@code HEAD inject} — захватывает {@code buffer}, {@code light}, {@code blockState}
- *       в {@code @Unique} поля (они нужны в @Redirect, который не получает outer params).</li>
- *   <li>{@code @Redirect ordinal=3} — заменяет вызов {@code SuperByteBuffer.renderInto}
- *       для основной модели шины. Внутри: сначала флип (если нужен), затем базовый рендер,
- *       затем два overlay-прохода.</li>
- *   <li>{@code @Inject ordinal=0 ItemRenderer.renderStatic} — флип для plain item (резервный
- *       путь Offroad, когда у шины нет partial model).</li>
- * </ul>
+ * Реальный порядок вызовов {@code SuperByteBuffer.renderInto(...)} внутри
+ * {@code renderSafe()} (проверено по декомпилированному исходнику, а НЕ по
+ * догадке): {@code teleOuter}=0, {@code teleInner}=1, {@code teleMount}=2,
+ * {@code wheel}=3 (только в ветке 1 выше), {@code springTop}=4, {@code springMiddle}=5,
+ * {@code springBottom}=6, {@code diodeLeft}=7, {@code diodeRight}=8.
+ * <p>
+ * Раньше здесь стоял {@code ordinal=4}, который в реальности перехватывал
+ * {@code springTop} (пружину подвески), а не колесо — отсюда баги "сдвинутая
+ * модель" (overlay рисовался в системе координат пружины) и "цвет не виден"
+ * (для колёс без модели никакой {@code renderInto} для шины вообще не вызывается,
+ * поэтому оба ordinal варианта тут были одинаково бесполезны). Исправлено на
+ * {@code ordinal=3}, и добавлен отдельный inject в ветку 2 для колёс без модели
+ * (собственные тайры Offroad).
+ * <p>
+ * <h3>Ключ реестра — item id, а не model RL</h3>
+ * Раз у колёс без модели {@code TireLike.model()} всегда пуст, ключевать реестр
+ * по нему для них в принципе невозможно. Реестр теперь ключуется по registry id
+ * самого предмета ({@code BuiltInRegistries.ITEM.getKey(stack.getItem())}) —
+ * этот идентификатор существует всегда, независимо от способа рендера.
  */
 @Mixin(value = WheelMountRenderer.class, remap = false)
 public class MixinWheelMountRenderer {
 
-    // Захваченные данные кадра (render thread — thread safety не нужна)
-    @Unique private ItemStack     bigtires$item   = ItemStack.EMPTY;
-    @Unique private BlockState    bigtires$state  = null;
+    @Unique private ItemStack bigtires$item = ItemStack.EMPTY;
+    @Unique private BlockState bigtires$state = null;
     @Unique private MultiBufferSource bigtires$buffer = null;
-    @Unique private int           bigtires$light  = 0;
-
-    // ── HEAD: захватываем данные текущего вызова renderSafe ──────────────────
+    @Unique private int bigtires$light = 0;
 
     @Inject(method = "renderSafe", at = @At("HEAD"), remap = false)
     private void bigtires$captureData(
@@ -73,11 +81,8 @@ public class MixinWheelMountRenderer {
         bigtires$light  = light;
     }
 
-    // ── REDIRECT ordinal=3: базовый рендер + flip + color overlays ───────────
-    //
-    // Заменяет вызов SuperByteBuffer.renderInto(...) для основной модели шины.
-    // ordinal=3 соответствует рендеру partial model шины в WheelMountRenderer.renderSafe().
-    // Предыдущий @Inject (bigtires$flipForPartialModel) УДАЛЁН — его логика перенесена сюда.
+    // ── ПУТЬ 1: колёса СО своей моделью (BigTires) — REDIRECT ordinal=3 ───────
+    // Настоящий "wheel" renderInto-вызов, подтверждено по декомпилированному исходнику.
 
     @Redirect(
             method = "renderSafe",
@@ -92,7 +97,6 @@ public class MixinWheelMountRenderer {
     private void bigtires$wheelRenderWithExtras(SuperByteBuffer buf, PoseStack ms, VertexConsumer vc) {
         ItemStack stack = bigtires$item;
 
-        // 1. Применяем flip если нужно (перенесено из старого @Inject)
         if (!stack.isEmpty() && Boolean.TRUE.equals(stack.get(BigTiresComponents.FLIPPED))) {
             TireLike tire = stack.get(OffroadDataComponents.TIRE);
             Vec3 offset   = (tire != null) ? tire.offset() : Vec3.ZERO;
@@ -100,45 +104,14 @@ public class MixinWheelMountRenderer {
             ms.translate(offset.x * 2, 0, 0);
         }
 
-        // 2. Базовый рендер (оригинальный вызов renderInto)
         buf.renderInto(ms, vc);
 
-        // 3. Color overlays — только если есть цветовые данные
-        if (stack.isEmpty()) return;
-        WheelColorData colorData = stack.get(BigTiresComponents.WHEEL_COLOR);
-        if (colorData == null) return;
-
-        TireLike tireLike = stack.get(OffroadDataComponents.TIRE);
-        if (tireLike == null || tireLike.model().isEmpty()) return;
-
-        ResourceLocation baseModelRL = tireLike.model().get();
-        PartialModel     overlayModel = WheelColorOverlayRegistry.getOverlayModel(baseModelRL);
-        ResourceLocation maskTexture  = WheelColorOverlayRegistry.getMaskTexture(baseModelRL);
-        if (overlayModel == null || maskTexture == null) return;
-
-        bigtires$renderOverlays(ms, overlayModel, maskTexture, colorData);
+        bigtires$renderColorOverlaysIfPresent(ms, stack);
     }
 
-    /** Два overlay-прохода: шина (R) и диск (G). */
-    @Unique
-    private void bigtires$renderOverlays(PoseStack ms, PartialModel overlayModel,
-                                         ResourceLocation maskTexture, WheelColorData colorData) {
-        // Tire overlay — шейдер читает R-канал color_mask.png
-        SuperByteBuffer tireOv = CachedBuffers.partial(overlayModel, bigtires$state);
-        tireOv.light(bigtires$light).translate(-0.5f, 0f, -0.5f);
-        int tc = colorData.tireColor();
-        tireOv.color((tc >> 16) & 0xFF, (tc >> 8) & 0xFF, tc & 0xFF, 255);
-        tireOv.renderInto(ms, bigtires$buffer.getBuffer(WheelColorRenderType.tire(maskTexture)));
-
-        // Rim overlay — шейдер читает G-канал color_mask.png
-        SuperByteBuffer rimOv = CachedBuffers.partial(overlayModel, bigtires$state);
-        rimOv.light(bigtires$light).translate(-0.5f, 0f, -0.5f);
-        int rc = colorData.rimColor();
-        rimOv.color((rc >> 16) & 0xFF, (rc >> 8) & 0xFF, rc & 0xFF, 255);
-        rimOv.renderInto(ms, bigtires$buffer.getBuffer(WheelColorRenderType.rim(maskTexture)));
-    }
-
-    // ── INJECT: flip для plain item (путь без partial model) ─────────────────
+    // ── ПУТЬ 2: колёса БЕЗ модели (собственные тайры Offroad) — INJECT ────────
+    // Рендерятся через ItemRenderer.renderStatic(), а не renderInto — редирект
+    // тут не сработает никогда, нужен отдельный inject прямо перед этим вызовом.
 
     @Inject(
             method = "renderSafe",
@@ -149,15 +122,64 @@ public class MixinWheelMountRenderer {
                     ordinal = 0
             )
     )
-    private void bigtires$flipForPlainItem(
+    private void bigtires$plainItemRenderExtras(
             WheelMountBlockEntity be, float partialTicks,
             PoseStack poseStack, MultiBufferSource buffer, int light, int overlay,
             CallbackInfo ci) {
         ItemStack stack = be.getHeldItem();
-        if (stack.isEmpty() || !Boolean.TRUE.equals(stack.get(BigTiresComponents.FLIPPED))) return;
-        TireLike tire = stack.get(OffroadDataComponents.TIRE);
-        Vec3 offset   = (tire != null) ? tire.offset() : Vec3.ZERO;
-        poseStack.mulPose(Axis.ZP.rotationDegrees(180.0f));
-        poseStack.translate(offset.x * 2, 0, 0);
+        if (stack.isEmpty()) return;
+
+        if (Boolean.TRUE.equals(stack.get(BigTiresComponents.FLIPPED))) {
+            TireLike tire = stack.get(OffroadDataComponents.TIRE);
+            Vec3 offset   = (tire != null) ? tire.offset() : Vec3.ZERO;
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180.0f));
+            poseStack.translate(offset.x * 2, 0, 0);
+        }
+
+        // Инжект стоит ДО вызова renderStatic — offset уже применён к poseStack
+        // самим Offroad (см. renderSafe: ms.translate(tireLike.offset()...) идёт
+        // непосредственно перед этим вызовом в обеих ветках). Значит наш overlay
+        // рисуется в той же точке, где окажется и сама (ванильно отрендеренная) шина.
+        bigtires$renderColorOverlaysIfPresent(poseStack, stack);
+    }
+
+    // ── Общая логика покраски для обеих веток ─────────────────────────────────
+
+    @Unique
+    private void bigtires$renderColorOverlaysIfPresent(PoseStack ms, ItemStack stack) {
+        Integer tireColor = stack.get(BigTiresComponents.TIRE_COLOR);
+        Integer rimColor  = stack.get(BigTiresComponents.RIM_COLOR);
+        if (tireColor == null && rimColor == null) return;
+
+        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if (!WheelColorOverlayRegistry.has(itemId)) return;
+
+        bigtires$renderOverlays(ms, itemId, tireColor, rimColor);
+    }
+
+    @Unique
+    private void bigtires$renderOverlays(PoseStack ms, ResourceLocation itemId,
+                                         @Nullable Integer tireColor,
+                                         @Nullable Integer rimColor) {
+        if (tireColor != null) {
+            PartialModel tireModel = WheelColorOverlayRegistry.getTireModel(itemId);
+            ResourceLocation tireMask = WheelColorOverlayRegistry.getTireMaskTexture(itemId);
+            if (tireModel != null && tireMask != null) {
+                SuperByteBuffer buf = CachedBuffers.partial(tireModel, bigtires$state);
+                buf.light(bigtires$light).translate(-0.5f, 0f, -0.5f);
+                buf.color((tireColor >> 16) & 0xFF, (tireColor >> 8) & 0xFF, tireColor & 0xFF, 255);
+                buf.renderInto(ms, bigtires$buffer.getBuffer(WheelColorRenderType.overlay(tireMask)));
+            }
+        }
+        if (rimColor != null) {
+            PartialModel rimModel = WheelColorOverlayRegistry.getRimModel(itemId);
+            ResourceLocation rimMask = WheelColorOverlayRegistry.getRimMaskTexture(itemId);
+            if (rimModel != null && rimMask != null) {
+                SuperByteBuffer buf = CachedBuffers.partial(rimModel, bigtires$state);
+                buf.light(bigtires$light).translate(-0.5f, 0f, -0.5f);
+                buf.color((rimColor >> 16) & 0xFF, (rimColor >> 8) & 0xFF, rimColor & 0xFF, 255);
+                buf.renderInto(ms, bigtires$buffer.getBuffer(WheelColorRenderType.overlay(rimMask)));
+            }
+        }
     }
 }

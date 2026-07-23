@@ -1,11 +1,15 @@
 {
-	"parent": "block/air",
-	"ambientocclusion": false,
+	"loader": "bigtires:tinted_obj",
+	"model": "bigtires:models/item/narrow_truck_tire/narrow_truck_tire.obj",
 	"textures": {
 		"narrow_truck_tire": "bigtires:block/narrow_truck_tire",
 		"particle": "bigtires:block/narrow_truck_tire"
 	},
-	"loader": "neoforge:obj",
-	"flip_v": true,
-	"model": "bigtires:models/item/narrow_truck_tire/narrow_truck_tire.obj"
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false,
+	"shade_quads": true,
+	"flip_v": true
 }

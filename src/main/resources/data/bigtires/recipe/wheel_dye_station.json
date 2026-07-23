@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "create:industrial_iron_block"
+    },
+    "T": {
+      "tag": "create:toolboxes"
+    },
+    "B": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "pattern": [
+    "ITI",
+    "IBI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "bigtires:wheel_dye_station"
+  }
+}

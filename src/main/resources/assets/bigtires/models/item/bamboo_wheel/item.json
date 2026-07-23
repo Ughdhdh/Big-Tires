@@ -5,7 +5,7 @@
 		"bamboo_wheel": "bigtires:block/bamboo_wheel",
 		"particle": "bigtires:block/bamboo_wheel"
 	},
-	"loader": "neoforge:obj",
+	"loader": "bigtires:tinted_obj",
 	"flip_v": true,
 	"model": "bigtires:models/item/bamboo_wheel/bamboo_wheel.obj",
 	"display": {
@@ -113,5 +113,10 @@
 				0.35
 			]
 		}
-	}
+	},
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false
 }

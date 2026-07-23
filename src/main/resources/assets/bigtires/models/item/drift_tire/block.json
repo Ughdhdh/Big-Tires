@@ -1,11 +1,15 @@
 {
-	"parent": "block/air",
-	"ambientocclusion": false,
+	"loader": "bigtires:tinted_obj",
+	"model": "bigtires:models/item/drift_tire/drift_tire.obj",
 	"textures": {
 		"drift_tire": "bigtires:block/drift_tire",
 		"particle": "bigtires:block/drift_tire"
 	},
-	"loader": "neoforge:obj",
-	"flip_v": true,
-	"model": "bigtires:models/item/drift_tire/drift_tire.obj"
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false,
+	"shade_quads": true,
+	"flip_v": true
 }

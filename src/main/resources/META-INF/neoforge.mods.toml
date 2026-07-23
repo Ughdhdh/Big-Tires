@@ -49,7 +49,7 @@ license        = "MIT"
 [[dependencies.bigtires]]
     modId = "sable"
     type = "required"
-    versionRange = "[1.0,)"
+    versionRange = "[2.0,)"
     ordering = "AFTER"
     side = "BOTH"
 

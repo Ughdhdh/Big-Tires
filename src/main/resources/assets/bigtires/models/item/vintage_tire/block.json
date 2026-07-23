@@ -1,11 +1,15 @@
 {
-	"parent": "block/air",
-	"ambientocclusion": false,
+	"loader": "bigtires:tinted_obj",
+	"model": "bigtires:models/item/vintage_tire/vintage_tire.obj",
 	"textures": {
 		"vintage_tire": "bigtires:block/vintage_tire",
 		"particle": "bigtires:block/vintage_tire"
 	},
-	"loader": "neoforge:obj",
-	"flip_v": true,
-	"model": "bigtires:models/item/vintage_tire/vintage_tire.obj"
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false,
+	"shade_quads": true,
+	"flip_v": true
 }

@@ -5,7 +5,7 @@
 		"monster_jam_tire": "bigtires:block/monster_jam_tire",
 		"particle": "bigtires:block/monster_jam_tire"
 	},
-	"loader": "neoforge:obj",
+	"loader": "bigtires:tinted_obj",
 	"flip_v": true,
 	"model": "bigtires:models/item/monster_jam_tire/monster_jam_tire.obj",
 	"display": {
@@ -113,5 +113,10 @@
 				0.3
 			]
 		}
-	}
+	},
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false
 }

@@ -5,7 +5,7 @@
 		"wooden_wheel": "bigtires:block/wooden_wheel",
 		"particle": "bigtires:block/wooden_wheel"
 	},
-	"loader": "neoforge:obj",
+	"loader": "bigtires:tinted_obj",
 	"flip_v": true,
 	"model": "bigtires:models/item/wooden_wheel/wooden_wheel.obj",
 	"display": {
@@ -113,5 +113,10 @@
 				0.6944
 			]
 		}
-	}
+	},
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false
 }

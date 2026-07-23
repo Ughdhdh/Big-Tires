@@ -22,7 +22,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import ughdhdh.bigtires.WheelColorData;
 import ughdhdh.bigtires.client.WheelColorOverlayRegistry;
 import ughdhdh.bigtires.client.WheelColorRenderType;
 import ughdhdh.bigtires.index.BigTiresComponents;
@@ -113,9 +112,10 @@ public class MotorcycleWheelMountRenderer
                 wheel.renderInto(ms, vb);
 
                 // Color overlays поверх базовой модели
-                WheelColorData colorData = itemStack.get(BigTiresComponents.WHEEL_COLOR);
-                if (colorData != null) {
-                    renderColorOverlays(ms, tireLike, colorData, state, light, buffer);
+                Integer tireColor = itemStack.get(BigTiresComponents.TIRE_COLOR);
+                Integer rimColor  = itemStack.get(BigTiresComponents.RIM_COLOR);
+                if (tireColor != null || rimColor != null) {
+                    renderColorOverlays(ms, tireLike, tireColor, rimColor, state, light, buffer);
                 }
 
             } else {
@@ -145,29 +145,31 @@ public class MotorcycleWheelMountRenderer
      * поэтому overlays встают точно на то же место.
      */
     private static void renderColorOverlays(PoseStack ms, TireLike tireLike,
-                                            WheelColorData colorData, BlockState state,
-                                            int light, MultiBufferSource buffer) {
+                                            Integer tireColor, Integer rimColor,
+                                            BlockState state, int light, MultiBufferSource buffer) {
         if (tireLike.model().isEmpty()) return;
         ResourceLocation baseModelRL = tireLike.model().get();
 
-        PartialModel overlayModel = WheelColorOverlayRegistry.getOverlayModel(baseModelRL);
-        if (overlayModel == null) return;
-        ResourceLocation maskTexture = WheelColorOverlayRegistry.getMaskTexture(baseModelRL);
-        if (maskTexture == null) return;
-
-        // Tire overlay (R-канал маски)
-        SuperByteBuffer tireOv = CachedBuffers.partial(overlayModel, state);
-        tireOv.light(light).translate(-0.5f, 0f, -0.5f);
-        int tc = colorData.tireColor();
-        tireOv.color((tc >> 16) & 0xFF, (tc >> 8) & 0xFF, tc & 0xFF, 255);
-        tireOv.renderInto(ms, buffer.getBuffer(WheelColorRenderType.tire(maskTexture)));
-
-        // Rim overlay (G-канал маски)
-        SuperByteBuffer rimOv = CachedBuffers.partial(overlayModel, state);
-        rimOv.light(light).translate(-0.5f, 0f, -0.5f);
-        int rc = colorData.rimColor();
-        rimOv.color((rc >> 16) & 0xFF, (rc >> 8) & 0xFF, rc & 0xFF, 255);
-        rimOv.renderInto(ms, buffer.getBuffer(WheelColorRenderType.rim(maskTexture)));
+        if (tireColor != null) {
+            PartialModel     tireModel = WheelColorOverlayRegistry.getTireModel(baseModelRL);
+            ResourceLocation tireMask  = WheelColorOverlayRegistry.getTireMaskTexture(baseModelRL);
+            if (tireModel != null && tireMask != null) {
+                SuperByteBuffer buf = CachedBuffers.partial(tireModel, state);
+                buf.light(light).translate(-0.5f, 0f, -0.5f);
+                buf.color((tireColor >> 16) & 0xFF, (tireColor >> 8) & 0xFF, tireColor & 0xFF, 255);
+                buf.renderInto(ms, buffer.getBuffer(WheelColorRenderType.overlay(tireMask)));
+            }
+        }
+        if (rimColor != null) {
+            PartialModel     rimModel = WheelColorOverlayRegistry.getRimModel(baseModelRL);
+            ResourceLocation rimMask  = WheelColorOverlayRegistry.getRimMaskTexture(baseModelRL);
+            if (rimModel != null && rimMask != null) {
+                SuperByteBuffer buf = CachedBuffers.partial(rimModel, state);
+                buf.light(light).translate(-0.5f, 0f, -0.5f);
+                buf.color((rimColor >> 16) & 0xFF, (rimColor >> 8) & 0xFF, rimColor & 0xFF, 255);
+                buf.renderInto(ms, buffer.getBuffer(WheelColorRenderType.overlay(rimMask)));
+            }
+        }
     }
 
     @Override

@@ -1,11 +1,15 @@
 {
-	"parent": "block/air",
-	"ambientocclusion": false,
+	"loader": "bigtires:tinted_obj",
+	"model": "bigtires:models/item/bamboo_wheel/bamboo_wheel.obj",
 	"textures": {
 		"bamboo_wheel": "bigtires:block/bamboo_wheel",
 		"particle": "bigtires:block/bamboo_wheel"
 	},
-	"loader": "neoforge:obj",
-	"flip_v": true,
-	"model": "bigtires:models/item/bamboo_wheel/bamboo_wheel.obj"
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false,
+	"shade_quads": true,
+	"flip_v": true
 }

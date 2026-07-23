@@ -80,4 +80,20 @@ public class BigTireLikes {
     public static final TireLike IRON_WHEEL =
             new TireLike(1.5f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
                     BigTires.path("item/iron_wheel/block"));
+
+    public static final TireLike TRACTION_ENGINE_WHEEL =
+            new TireLike(2.45f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
+                    BigTires.path("item/traction_engine_wheel/block"));
+
+    public static final TireLike SMALL_TRACTION_ENGINE_WHEEL =
+            new TireLike(1.5f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
+                    BigTires.path("item/small_traction_engine_wheel/block"));
+
+    public static final TireLike STEEL_TRACTION_ENGINE_WHEEL =
+            new TireLike(2.4f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
+                    BigTires.path("item/steel_traction_engine_wheel/block"));
+
+    public static final TireLike SMALL_STEEL_TRACTION_ENGINE_WHEEL =
+            new TireLike(1.45f, new Vec3(90,0,0), new Vec3(0.5, 0.0, 0.5),
+                    BigTires.path("item/small_steel_traction_engine_wheel/block"));
 }

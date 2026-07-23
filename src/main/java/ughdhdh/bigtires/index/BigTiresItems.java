@@ -120,6 +120,34 @@ public class BigTiresItems {
                         .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.IRON))
                 .model(AssetLookup.itemModelWithPartials()).register();
 
+        // ── Traction Engine Wheel 4.9x4.9x1 ───────────────────────────────────────────
+        REGISTRATE.item("traction_engine_wheel", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.TRACTION_ENGINE_WHEEL)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.TRACTION_ENGINE))
+                .model(AssetLookup.itemModelWithPartials()).register();
+
+        // ── Small Traction Engine Wheel 3x3x0.5 ───────────────────────────────────────────
+        REGISTRATE.item("small_traction_engine_wheel", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.SMALL_TRACTION_ENGINE_WHEEL)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.SMALL_TRACTION_ENGINE))
+                .model(AssetLookup.itemModelWithPartials()).register();
+
+        // ── Steel Traction Engine Wheel 4.75x4.75x1.6 ───────────────────────────────────────────
+        REGISTRATE.item("steel_traction_engine_wheel", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.STEEL_TRACTION_ENGINE_WHEEL)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.STEEL_TRACTION_ENGINE))
+                .model(AssetLookup.itemModelWithPartials()).register();
+
+        // ── Small Steel Traction Engine Wheel 2.9x2.9x0.5 ───────────────────────────────────────────
+        REGISTRATE.item("small_steel_traction_engine_wheel", TireItem::new)
+                .properties(x -> x
+                        .component(OffroadDataComponents.TIRE,      BigTireLikes.SMALL_STEEL_TRACTION_ENGINE_WHEEL)
+                        .component(BigTiresComponents.TIRE_PHYSICS, TirePhysicsData.SMALL_STEEL_TRACTION_ENGINE))
+                .model(AssetLookup.itemModelWithPartials()).register();
+
         // ── Wheel Wrench ──────────────────────────────────────────────────────
         REGISTRATE.item("wheel_wrench", WheelWrenchItem::new)
                 .model((ctx, prov) -> prov.handheld(ctx::getEntry))

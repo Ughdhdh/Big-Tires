@@ -5,7 +5,7 @@
 		"huge_rowing_wide_tire": "bigtires:block/huge_rowing_wide_tire",
 		"particle": "bigtires:block/huge_rowing_wide_tire"
 	},
-	"loader": "neoforge:obj",
+	"loader": "bigtires:tinted_obj",
 	"flip_v": true,
 	"model": "bigtires:models/item/huge_rowing_wide_tire/huge_rowing_wide_tire.obj",
 	"display": {
@@ -113,5 +113,10 @@
 				0.1157
 			]
 		}
-	}
+	},
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false
 }

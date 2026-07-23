@@ -26,7 +26,7 @@ public class WheelDyeStationBlock extends BaseEntityBlock {
 
     public static final MapCodec<WheelDyeStationBlock> CODEC = simpleCodec(WheelDyeStationBlock::new);
 
-    private static final VoxelShape SHAPE = box(0, 0, 0, 16, 14, 16);
+    private static final VoxelShape SHAPE = box(0, 0, 0, 16, 16, 16);
 
     public WheelDyeStationBlock(Properties properties) {
         super(properties);

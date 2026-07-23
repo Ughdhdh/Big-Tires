@@ -5,7 +5,7 @@
 		"tractor_tire": "bigtires:block/tractor_tire",
 		"particle": "bigtires:block/tractor_tire"
 	},
-	"loader": "neoforge:obj",
+	"loader": "bigtires:tinted_obj",
 	"flip_v": true,
 	"model": "bigtires:models/item/tractor_tire/tractor_tire.obj",
 	"display": {
@@ -113,5 +113,10 @@
 				0.6944
 			]
 		}
-	}
+	},
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false
 }

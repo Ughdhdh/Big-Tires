@@ -47,5 +47,9 @@ public record TirePhysicsData(
     public static final TirePhysicsData DRIFT        = new TirePhysicsData(0.1f, 1.7f, 0.05f, 0.15f);
     public static final TirePhysicsData WOODEN       = new TirePhysicsData(1.0f, 1.0f, 0.45f, 0.5f);
     public static final TirePhysicsData IRON         = new TirePhysicsData(0.9f, 0.9f, 0.2f, 0.6f);
+    public static final TirePhysicsData TRACTION_ENGINE               = new TirePhysicsData(0.9f, 0.9f, 0.2f, 0.6f);
+    public static final TirePhysicsData SMALL_TRACTION_ENGINE         = new TirePhysicsData(0.9f, 0.9f, 0.2f, 0.6f);
+    public static final TirePhysicsData STEEL_TRACTION_ENGINE         = new TirePhysicsData(0.9f, 0.9f, 0.2f, 0.6f);
+    public static final TirePhysicsData SMALL_STEEL_TRACTION_ENGINE   = new TirePhysicsData(0.9f, 0.9f, 0.2f, 0.6f);
 
 }

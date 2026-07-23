@@ -52,6 +52,7 @@ public class BigTires {
 
     public static void clientInit() {
         BigTiresPartialModels.init();
+        ughdhdh.bigtires.client.OffroadWheelColorCompat.init();
     }
 
     public static SimulatedRegistrate getRegistrate() {

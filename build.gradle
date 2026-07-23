@@ -71,22 +71,22 @@ repositories {
 }
 
 dependencies {
-    // ── Create & Ponder ───────────────────────────────────────────────────────
+    // ── Create, Ponder
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     implementation "net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}"
     compileOnly  "dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}"
     runtimeOnly  "dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"
 
-    // ── MixinExtras ───────────────────────────────────────────────────────────
+    // ── MixinExtras
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
     implementation "io.github.llamalad7:mixinextras-neoforge:0.4.1"
 
-    // ── Зависимости из референса ───────────
+    // ── Зависимости из референса
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
     implementation("dev.ryanhcode.sable-companion:sable-companion-common-${minecraft_version}:${sable_companion_version}")
     implementation("foundry.veil:veil-neoforge-${minecraft_version}:4.1.4")
 
-    // ── Локальные JARы────────────────────────────────
+    // ── Локальные JARы
     implementation ':create-aeronautics-bundled-1.21.1-1.3.0'
     implementation ':sable-neoforge-1.21.1-2.0.0'
     implementation ':dev.ryanhcode.offroad.offroad-neoforge-1.21.1-1.3.0'
