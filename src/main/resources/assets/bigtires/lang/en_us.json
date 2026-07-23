@@ -1,22 +1,65 @@
 {
 	"bigtires.simulated_section.bigtires": "Big Tires",
 	"item.bigtires.huge_tire": "Huge Tire",
+	"item.bigtires.huge_tire.tooltip.summary": "10x10x3, Good Grip, Medium Rolling Resistance, Good Side Grip",
+
 	"item.bigtires.huge_wide_tire": "Huge Wide Tire",
+	"item.bigtires.huge_wide_tire.tooltip.summary": "10x10x4, Very Good Grip, Medium Rolling Resistance, Very Good Side Grip",
+
 	"item.bigtires.huge_rowing_tire": "Huge Rowing Tire",
+	"item.bigtires.huge_rowing_tire.tooltip.summary": "12x12x4, Very Bad Grip, Strong Rolling Resistance, Bad Side Grip, _Can Float_",
+
 	"item.bigtires.huge_rowing_wide_tire": "Huge Rowing Wide Tire",
+	"item.bigtires.huge_rowing_wide_tire.tooltip.summary": "12x12x6, Very Bad Grip, Strong Rolling Resistance, Bad Side Grip, _Can Float_",
+
 	"item.bigtires.big_tractor_tire": "Big Tractor Tire",
+	"item.bigtires.big_tractor_tire.tooltip.summary": "3x3x1, Awesome Grip, Strong Rolling Resistance, Awesome Side Grip",
+
 	"item.bigtires.tractor_tire": "Tractor Tire",
+	"item.bigtires.tractor_tire.tooltip.summary": "2x2x1, Awesome Grip, Strong Rolling Resistance, Awesome Side Grip",
+
 	"item.bigtires.truck_tire": "Truck Tire",
+	"item.bigtires.truck_tire.tooltip.summary": "",
+
 	"item.bigtires.narrow_truck_tire": "Narrow Truck Tire",
+	"item.bigtires.narrow_truck_tire.tooltip.summary": "",
+
 	"item.bigtires.small_truck_tire": "Small Truck Tire",
+	"item.bigtires.small_truck_tire.tooltip.summary": "",
+
 	"item.bigtires.monster_jam_tire": "Monster Jam Tire",
+	"item.bigtires.monster_jam_tire.tooltip.summary": "",
+
 	"item.bigtires.bamboo_wheel": "Bamboo Wheel",
+	"item.bigtires.bamboo_wheel.tooltip.summary": "4x4x1.5, Medium Grip, Medium Rolling Resistance, Bad Side Grip, _Can Float_",
+
 	"item.bigtires.vintage_tire": "Vintage Tire",
-	"block.bigtires.motorcycle_wheel_mount": "Motorcycle Wheel Mount",
+	"item.bigtires.vintage_tire.tooltip.summary": "",
+
 	"item.bigtires.drift_tire": "Drift Tire",
+	"item.bigtires.drift_tire.tooltip.summary": "2x2x1, Very Bad Grip, Almost NO Rolling Resistance, Very Very Bad Side Grip, _Can Drift_",
+
 	"item.bigtires.wooden_wheel": "Wooden Wheel",
-	"item.bigtires.wheel_wrench": "Wheel Wrench",
+	"item.bigtires.wooden_wheel.tooltip.summary": "",
+
 	"item.bigtires.iron_wheel": "Iron Wheel",
+	"item.bigtires.iron_wheel.tooltip.summary": "",
+
+	"item.bigtires.traction_engine_wheel": "Traction Engine Wheel",
+	"item.bigtires.traction_engine_wheel.tooltip.summary": "",
+
+	"item.bigtires.small_traction_engine_wheel": "Small Traction Engine Wheel",
+	"item.bigtires.small_traction_engine_wheel.tooltip.summary": "",
+
+	"item.bigtires.steel_traction_engine_wheel": "Steel Traction Engine Wheel",
+	"item.bigtires.steel_traction_engine_wheel.tooltip.summary": "",
+
+	"item.bigtires.small_steel_traction_engine_wheel": "Small Steel Traction Engine Wheel",
+	"item.bigtires.small_steel_traction_engine_wheel.tooltip.summary": "",
+
+	"block.bigtires.motorcycle_wheel_mount": "Motorcycle Wheel Mount",
+
+	"item.bigtires.wheel_wrench": "Wheel Wrench",
 	"item.bigtires.wheel_wrench.tooltip.summary": "Used to flip the appearance of items mounted on Wheel Mounts.",
 	"item.bigtires.wheel_wrench.tooltip.condition1": "When used on a Wheel Mount",
 	"item.bigtires.wheel_wrench.tooltip.behaviour1": "Flips the mounted item _180°_ around its vertical axis",
@@ -29,5 +72,7 @@
 	"gui.bigtires.wheel_dye_station.tire": "Tire",
 	"gui.bigtires.wheel_dye_station.rim": "Rim",
 	"gui.bigtires.wheel_dye_station.tire_color": "Tire Color:",
-	"gui.bigtires.wheel_dye_station.rim_color": "Rim Color:"
+	"gui.bigtires.wheel_dye_station.rim_color": "Rim Color:",
+	"tooltip.bigtires.tire_color": "Tire Color: %s",
+	"tooltip.bigtires.rim_color": "Rim Color: %s"
 }
