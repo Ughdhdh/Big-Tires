@@ -1,5 +1,6 @@
 {
 	"bigtires.simulated_section.bigtires": "Big Tires",
+
 	"item.bigtires.huge_tire": "Huge Tire",
 	"item.bigtires.huge_tire.tooltip.summary": "10x10x3, Good Grip, Medium Rolling Resistance, Good Side Grip",
 
@@ -19,43 +20,43 @@
 	"item.bigtires.tractor_tire.tooltip.summary": "2x2x1, Awesome Grip, Strong Rolling Resistance, Awesome Side Grip",
 
 	"item.bigtires.truck_tire": "Truck Tire",
-	"item.bigtires.truck_tire.tooltip.summary": "",
+	"item.bigtires.truck_tire.tooltip.summary": "3x3x1.5, Good Grip, Medium Rolling Resistance, Good Side Grip",
 
 	"item.bigtires.narrow_truck_tire": "Narrow Truck Tire",
-	"item.bigtires.narrow_truck_tire.tooltip.summary": "",
+	"item.bigtires.narrow_truck_tire.tooltip.summary": "3x3x1, Good Grip, Medium Rolling Resistance, Good Side Grip",
 
 	"item.bigtires.small_truck_tire": "Small Truck Tire",
-	"item.bigtires.small_truck_tire.tooltip.summary": "",
+	"item.bigtires.small_truck_tire.tooltip.summary": "3x3x1, Good Grip, Medium Rolling Resistance, Good Side Grip",
 
 	"item.bigtires.monster_jam_tire": "Monster Jam Tire",
-	"item.bigtires.monster_jam_tire.tooltip.summary": "",
+	"item.bigtires.monster_jam_tire.tooltip.summary": "5x5x3.5, Very Bad Grip, Strong Rolling Resistance, Medium Side Grip",
 
 	"item.bigtires.bamboo_wheel": "Bamboo Wheel",
 	"item.bigtires.bamboo_wheel.tooltip.summary": "4x4x1.5, Medium Grip, Medium Rolling Resistance, Bad Side Grip, _Can Float_",
 
 	"item.bigtires.vintage_tire": "Vintage Tire",
-	"item.bigtires.vintage_tire.tooltip.summary": "",
+	"item.bigtires.vintage_tire.tooltip.summary": "2x2x1, Good Grip, Medium Rolling Resistance, Bad Side Grip",
 
 	"item.bigtires.drift_tire": "Drift Tire",
 	"item.bigtires.drift_tire.tooltip.summary": "2x2x1, Very Bad Grip, Almost NO Rolling Resistance, Very Very Bad Side Grip, _Can Drift_",
 
 	"item.bigtires.wooden_wheel": "Wooden Wheel",
-	"item.bigtires.wooden_wheel.tooltip.summary": "",
+	"item.bigtires.wooden_wheel.tooltip.summary": "1.5x1.5x0.5, Good Grip, Medium Rolling Resistance, Medium Side Grip",
 
 	"item.bigtires.iron_wheel": "Iron Wheel",
-	"item.bigtires.iron_wheel.tooltip.summary": "",
+	"item.bigtires.iron_wheel.tooltip.summary": "1.5x1.5x0.5, Good Grip, Almost NO Rolling Resistance, Medium Side Grip",
 
 	"item.bigtires.traction_engine_wheel": "Traction Engine Wheel",
-	"item.bigtires.traction_engine_wheel.tooltip.summary": "",
+	"item.bigtires.traction_engine_wheel.tooltip.summary": "5x5x1, Good Grip, Almost NO Rolling Resistance, Medium Side Grip",
 
 	"item.bigtires.small_traction_engine_wheel": "Small Traction Engine Wheel",
-	"item.bigtires.small_traction_engine_wheel.tooltip.summary": "",
+	"item.bigtires.small_traction_engine_wheel.tooltip.summary": "3x3x0.5, Good Grip, Almost NO Rolling Resistance, Medium Side Grip",
 
 	"item.bigtires.steel_traction_engine_wheel": "Steel Traction Engine Wheel",
-	"item.bigtires.steel_traction_engine_wheel.tooltip.summary": "",
+	"item.bigtires.steel_traction_engine_wheel.tooltip.summary": "5x5x1.5, Good Grip, Almost NO Rolling Resistance, Medium Side Grip",
 
 	"item.bigtires.small_steel_traction_engine_wheel": "Small Steel Traction Engine Wheel",
-	"item.bigtires.small_steel_traction_engine_wheel.tooltip.summary": "",
+	"item.bigtires.small_steel_traction_engine_wheel.tooltip.summary": "3x3x0.5, Good Grip, Almost NO Rolling Resistance, Medium Side Grip",
 
 	"block.bigtires.motorcycle_wheel_mount": "Motorcycle Wheel Mount",
 
@@ -70,8 +71,6 @@
 	"gui.bigtires.wheel_dye_station.apply": "Apply",
 	"gui.bigtires.wheel_dye_station.tire": "Tire",
 	"gui.bigtires.wheel_dye_station.rim": "Rim",
-	"gui.bigtires.wheel_dye_station.tire_color": "Tire Color:",
-	"gui.bigtires.wheel_dye_station.rim_color": "Rim Color:",
 	"tooltip.bigtires.tire_color": "Tire Color: %s",
 	"tooltip.bigtires.rim_color": "Rim Color: %s"
 }

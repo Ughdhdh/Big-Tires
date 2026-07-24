@@ -26,8 +26,6 @@
 	"gui.bigtires.wheel_dye_station.apply": "Покрасить",
 	"gui.bigtires.wheel_dye_station.tire": "Шина",
 	"gui.bigtires.wheel_dye_station.rim": "Диск",
-	"gui.bigtires.wheel_dye_station.tire_color": "Цвет шины:",
-	"gui.bigtires.wheel_dye_station.rim_color": "Цвет диска:",
 	"tooltip.bigtires.tire_color": "Цвет шины: %s",
 	"tooltip.bigtires.rim_color": " Цвет диска: %s"
 }
