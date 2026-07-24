@@ -4,13 +4,13 @@
   "category": "misc",
   "key": {
     "W": {
-      "tag": "minecraft:iron"
+      "item": "minecraft:iron_ingot"
     },
     "S": {
-      "tag": "create:shaft"
+      "item": "create:shaft"
     },
     "K": {
-      "tag": "minecraft:dried_kelp"
+      "item": "minecraft:dried_kelp"
     }
   },
   "pattern": [

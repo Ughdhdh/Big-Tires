@@ -42,13 +42,13 @@ public class WheelDyeStationScreen extends AbstractContainerScreen<WheelDyeStati
         addRenderableWidget(Button.builder(
                 Component.translatable("gui.bigtires.wheel_dye_station.apply"),
                 btn -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 0)
-        ).bounds(x + 63, y + 54, 49, 16).build());
+        ).bounds(x + 64, y + 55, 48, 15).build());
 
         // Кнопка «Сбросить цвет» (button id = 1)
         addRenderableWidget(Button.builder(
                 Component.translatable("gui.bigtires.wheel_dye_station.reset"),
                 btn -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 1)
-        ).bounds(x + 198, y + 60, 58, 18).build());
+        ).bounds(x + 1, y + 1, 1, 1).build());
     }
 
     @Override
@@ -87,10 +87,10 @@ public class WheelDyeStationScreen extends AbstractContainerScreen<WheelDyeStati
         // Подписи слотов
         graphics.drawString(font,
                 Component.translatable("gui.bigtires.wheel_dye_station.tire"),
-                27, 25, 0x404040, false);
+                33, 19, 0x404040, false);
         graphics.drawString(font,
                 Component.translatable("gui.bigtires.wheel_dye_station.rim"),
-                110, 25, 0x404040, false);
+                123, 19, 0x404040, false);
 
         // Лейбл инвентаря игрока
         graphics.drawString(font, playerInventoryTitle, 8, inventoryLabelY, 0x404040, false);

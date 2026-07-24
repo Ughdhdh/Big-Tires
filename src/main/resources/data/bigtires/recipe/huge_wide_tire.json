@@ -17,13 +17,11 @@
     }
   },
   "pattern": [
-    "  DDD  ",
-    " DIIID ",
-    "DIKKKID",
-    "DIKSKID",
-    "DIKKKID",
-    " DIIID ",
-    "  DDD  "
+    "DIKID",
+    "IIKII",
+    "KKSKK",
+    "IIKII",
+    "DIKID"
   ],
   "result": {
     "count": 2,

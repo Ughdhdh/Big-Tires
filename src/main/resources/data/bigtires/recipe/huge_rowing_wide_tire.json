@@ -17,13 +17,11 @@
     }
   },
   "pattern": [
-    "  DDD  ",
-    " DEEED ",
-    "DEEKEED",
-    "DEKSKED",
-    "DEEKEED",
-    " DEEED ",
-    "  DDD  "
+    "DEKED",
+    "EEKEE",
+    "KKSKK",
+    "EEKEE",
+    "DEKED"
   ],
   "result": {
     "count": 2,

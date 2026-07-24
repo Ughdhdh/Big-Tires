@@ -3,23 +3,23 @@
   "accept_mirrored": true,
   "category": "misc",
   "key": {
-    "I": {
-      "item": "create:iron_sheet"
-    },
-    "W": {
-      "tag": "minecraft:stripped_logs"
+    "B": {
+      "item": "minecraft:iron_ingot"
     },
     "S": {
-      "item": "create:shaft"
+      "item": "create:iron_sheet"
+    },
+    "F": {
+      "item": "create:flywheel"
     }
   },
   "pattern": [
-    "WWW",
-    "ISI",
-    "WWW"
+    "SBS",
+    "BFB",
+    "SBS"
   ],
   "result": {
     "count": 2,
-    "id": "bigtires:wooden_wheel"
+    "id": "bigtires:small_steel_traction_engine_wheel"
   }
 }

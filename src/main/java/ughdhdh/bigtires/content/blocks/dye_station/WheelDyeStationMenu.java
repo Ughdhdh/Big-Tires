@@ -53,15 +53,15 @@ public class WheelDyeStationMenu extends AbstractContainerMenu {
         checkContainerSize(container, WheelDyeStationBlockEntity.CONTAINER_SIZE);
 
         // ── Слот колеса (центр) ──────────────────────────────────────────────
-        addSlot(new Slot(container, WheelDyeStationBlockEntity.SLOT_WHEEL, 80, 35));
+        addSlot(new Slot(container, WheelDyeStationBlockEntity.SLOT_WHEEL, 80, 32));
 
         // ── Слот красителя шины (слева) ──────────────────────────────────────
-        addSlot(new Slot(container, WheelDyeStationBlockEntity.SLOT_TIRE_DYE, 44, 35) {
+        addSlot(new Slot(container, WheelDyeStationBlockEntity.SLOT_TIRE_DYE, 35, 32) {
             @Override public boolean mayPlace(ItemStack stack) { return stack.getItem() instanceof DyeItem; }
         });
 
         // ── Слот красителя диска (справа) ────────────────────────────────────
-        addSlot(new Slot(container, WheelDyeStationBlockEntity.SLOT_RIM_DYE, 116, 35) {
+        addSlot(new Slot(container, WheelDyeStationBlockEntity.SLOT_RIM_DYE, 125, 32) {
             @Override public boolean mayPlace(ItemStack stack) { return stack.getItem() instanceof DyeItem; }
         });
 

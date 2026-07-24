@@ -1,25 +1,30 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "create:mechanical_crafting",
   "accept_mirrored": true,
   "category": "misc",
   "key": {
-    "I": {
-      "item": "create:iron_sheet"
-    },
-    "W": {
-      "tag": "minecraft:stripped_logs"
+    "B": {
+      "item": "minecraft:iron_ingot"
     },
     "S": {
-      "item": "create:shaft"
+      "item": "create:iron_sheet"
+    },
+    "F": {
+      "item": "create:flywheel"
+    },
+    "A": {
+      "item": "create:andesite_alloy"
     }
   },
   "pattern": [
-    "WWW",
-    "ISI",
-    "WWW"
+    " ABA ",
+    "ASSSA",
+    "BSFSB",
+    "ASSSA",
+    " ABA "
   ],
   "result": {
     "count": 2,
-    "id": "bigtires:wooden_wheel"
+    "id": "bigtires:steel_traction_engine_wheel"
   }
 }
