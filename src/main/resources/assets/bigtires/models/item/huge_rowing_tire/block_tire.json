@@ -1,0 +1,16 @@
+{
+	"loader": "bigtires:tinted_obj",
+	"model": "bigtires:models/item/huge_rowing_tire/huge_rowing_tire.obj",
+	"textures": {
+		"huge_rowing_tire": "bigtires:block/huge_rowing_tire",
+		"particle": "bigtires:block/huge_rowing_tire"
+	},
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false,
+	"shade_quads": true,
+	"flip_v": true,
+	"only_tint_index": 0
+}

@@ -18,7 +18,7 @@ import ughdhdh.bigtires.index.BigTiresComponents;
  * Позиции слотов в {@link WheelDyeStationMenu} обязаны совпадать с тем местом,
  * где на текстуре реально нарисованы "дырки" слотов.
  * <p>
- * Кнопки отправляют {@code handleInventoryButtonClick} на сервер через ванильный механизм.
+ * Кнопка отправляет {@code handleInventoryButtonClick} на сервер через ванильный механизм.
  */
 public class WheelDyeStationScreen extends AbstractContainerScreen<WheelDyeStationMenu> {
 
@@ -43,12 +43,6 @@ public class WheelDyeStationScreen extends AbstractContainerScreen<WheelDyeStati
                 Component.translatable("gui.bigtires.wheel_dye_station.apply"),
                 btn -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 0)
         ).bounds(x + 64, y + 55, 48, 15).build());
-
-        // Кнопка «Сбросить цвет» (button id = 1)
-        addRenderableWidget(Button.builder(
-                Component.translatable("gui.bigtires.wheel_dye_station.reset"),
-                btn -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 1)
-        ).bounds(x + 1, y + 1, 1, 1).build());
     }
 
     @Override

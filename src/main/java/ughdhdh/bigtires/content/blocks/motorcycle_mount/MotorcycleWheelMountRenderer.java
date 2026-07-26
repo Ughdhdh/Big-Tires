@@ -22,9 +22,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import ughdhdh.bigtires.client.WheelColorOverlayRegistry;
-import ughdhdh.bigtires.client.WheelColorRenderType;
 import ughdhdh.bigtires.index.BigTiresComponents;
+import ughdhdh.bigtires.index.BigTiresPartialModels;
 
 public class MotorcycleWheelMountRenderer
         extends KineticBlockEntityRenderer<MotorcycleWheelMountBlockEntity> {
@@ -96,11 +95,12 @@ public class MotorcycleWheelMountRenderer
             ms.translate(tireLike.offset().x, tireLike.offset().y, tireLike.offset().z);
 
             if (tireLike.model().isPresent()) {
-                final SuperByteBuffer wheel = CachedBuffers.partial(
-                        PartialModel.of(tireLike.model().get()), state);
-                wheel.light(light).translate(-0.5f, 0f, -0.5f);
+                final ResourceLocation baseModelRL = tireLike.model().get();
+                final Integer tireColor = itemStack.get(BigTiresComponents.TIRE_COLOR);
+                final Integer rimColor  = itemStack.get(BigTiresComponents.RIM_COLOR);
 
-                // Flip если нужно
+                // Flip если нужно — ДО построения буферов, чтобы координаты трансформации
+                // совпали у всех трёх под-моделей.
                 if (Boolean.TRUE.equals(itemStack.get(BigTiresComponents.FLIPPED))) {
                     ms.mulPose(Axis.ZP.rotationDegrees(180.0f));
                     if (itemStack.has(BigTiresComponents.TIRE_PHYSICS)) {
@@ -108,15 +108,13 @@ public class MotorcycleWheelMountRenderer
                     }
                 }
 
-                // Базовый рендер (оригинальные цвета, без тинта)
-                wheel.renderInto(ms, vb);
-
-                // Color overlays поверх базовой модели
-                Integer tireColor = itemStack.get(BigTiresComponents.TIRE_COLOR);
-                Integer rimColor  = itemStack.get(BigTiresComponents.RIM_COLOR);
-                if (tireColor != null || rimColor != null) {
-                    renderColorOverlays(ms, tireLike, tireColor, rimColor, state, light, buffer);
-                }
+                // Три независимо красящихся под-буфера (см. BigTiresPartialModels):
+                // "tire" и "rim" красятся выбранным цветом (или белым — без изменений,
+                // если ещё не покрашено), "neutral" (например ось у huge_rowing_tire)
+                // рендерится как есть, без тинта.
+                renderTintedPart(ms, vb, BigTiresPartialModels.tireVariant(baseModelRL), state, light, tireColor);
+                renderTintedPart(ms, vb, BigTiresPartialModels.rimVariant(baseModelRL), state, light, rimColor);
+                renderTintedPart(ms, vb, BigTiresPartialModels.neutralVariant(baseModelRL), state, light, null);
 
             } else {
                 if (Boolean.TRUE.equals(itemStack.get(BigTiresComponents.FLIPPED))) {
@@ -136,40 +134,18 @@ public class MotorcycleWheelMountRenderer
     }
 
     /**
-     * Рендерит два overlay-прохода поверх базовой модели:
-     * <ul>
-     *   <li>Tire overlay × {@code WHEEL_COLOR.tireColor()} — шейдер читает R-канал маски.</li>
-     *   <li>Rim overlay × {@code WHEEL_COLOR.rimColor()} — шейдер читает G-канал маски.</li>
-     * </ul>
-     * PoseStack уже содержит все трансформы основной модели (включая flip),
-     * поэтому overlays встают точно на то же место.
+     * Рендерит одну под-модель (шина/диск/нейтральная часть), опционально
+     * умножая её цвет на {@code colorArgb} (RGB без альфы — альфа всегда 255).
+     * {@code null} = без покраски (естественный цвет текстуры, множитель белый).
      */
-    private static void renderColorOverlays(PoseStack ms, TireLike tireLike,
-                                            Integer tireColor, Integer rimColor,
-                                            BlockState state, int light, MultiBufferSource buffer) {
-        if (tireLike.model().isEmpty()) return;
-        ResourceLocation baseModelRL = tireLike.model().get();
-
-        if (tireColor != null) {
-            PartialModel     tireModel = WheelColorOverlayRegistry.getTireModel(baseModelRL);
-            ResourceLocation tireMask  = WheelColorOverlayRegistry.getTireMaskTexture(baseModelRL);
-            if (tireModel != null && tireMask != null) {
-                SuperByteBuffer buf = CachedBuffers.partial(tireModel, state);
-                buf.light(light).translate(-0.5f, 0f, -0.5f);
-                buf.color((tireColor >> 16) & 0xFF, (tireColor >> 8) & 0xFF, tireColor & 0xFF, 255);
-                buf.renderInto(ms, buffer.getBuffer(WheelColorRenderType.overlay(tireMask)));
-            }
+    private static void renderTintedPart(PoseStack ms, VertexConsumer vb, PartialModel part,
+                                         BlockState state, int light, Integer colorArgb) {
+        final SuperByteBuffer buf = CachedBuffers.partial(part, state);
+        buf.light(light).translate(-0.5f, 0f, -0.5f);
+        if (colorArgb != null) {
+            buf.color((colorArgb >> 16) & 0xFF, (colorArgb >> 8) & 0xFF, colorArgb & 0xFF, 255);
         }
-        if (rimColor != null) {
-            PartialModel     rimModel = WheelColorOverlayRegistry.getRimModel(baseModelRL);
-            ResourceLocation rimMask  = WheelColorOverlayRegistry.getRimMaskTexture(baseModelRL);
-            if (rimModel != null && rimMask != null) {
-                SuperByteBuffer buf = CachedBuffers.partial(rimModel, state);
-                buf.light(light).translate(-0.5f, 0f, -0.5f);
-                buf.color((rimColor >> 16) & 0xFF, (rimColor >> 8) & 0xFF, rimColor & 0xFF, 255);
-                buf.renderInto(ms, buffer.getBuffer(WheelColorRenderType.overlay(rimMask)));
-            }
-        }
+        buf.renderInto(ms, vb);
     }
 
     @Override

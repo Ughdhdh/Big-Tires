@@ -2,6 +2,7 @@ package ughdhdh.bigtires.client.tintedobj;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
@@ -34,15 +35,18 @@ public final class BigTiresTintedObjBakedModel implements IDynamicBakedModel {
     private final boolean usesBlockLight;
     private final TextureAtlasSprite particle;
     private final ItemOverrides overrides;
+    private final ItemTransforms transforms;
 
     public BigTiresTintedObjBakedModel(List<BakedQuad> quads, boolean useAmbientOcclusion, boolean isGui3d,
-                                       boolean usesBlockLight, TextureAtlasSprite particle, ItemOverrides overrides) {
+                                       boolean usesBlockLight, TextureAtlasSprite particle, ItemOverrides overrides,
+                                       ItemTransforms transforms) {
         this.quads = quads;
         this.useAmbientOcclusion = useAmbientOcclusion;
         this.isGui3d = isGui3d;
         this.usesBlockLight = usesBlockLight;
         this.particle = particle;
         this.overrides = overrides;
+        this.transforms = transforms;
     }
 
     @Override
@@ -58,4 +62,5 @@ public final class BigTiresTintedObjBakedModel implements IDynamicBakedModel {
     @Override public boolean isCustomRenderer() { return false; }
     @Override public TextureAtlasSprite getParticleIcon() { return particle; }
     @Override public ItemOverrides getOverrides() { return overrides; }
+    @Override public ItemTransforms getTransforms() { return transforms; }
 }

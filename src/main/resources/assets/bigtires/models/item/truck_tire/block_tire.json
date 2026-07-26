@@ -1,0 +1,16 @@
+{
+	"loader": "bigtires:tinted_obj",
+	"model": "bigtires:models/item/truck_tire/truck_tire.obj",
+	"textures": {
+		"truck_tire": "bigtires:block/truck_tire",
+		"particle": "bigtires:block/truck_tire"
+	},
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false,
+	"shade_quads": true,
+	"flip_v": true,
+	"only_tint_index": 0
+}

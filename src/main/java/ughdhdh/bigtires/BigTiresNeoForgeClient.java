@@ -11,7 +11,6 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import ughdhdh.bigtires.client.OffroadWheelColorCompat;
 import ughdhdh.bigtires.client.tintedobj.BigTiresTintedObjLoader;
 import ughdhdh.bigtires.client.tintedobj.TintedWheelItemColor;
 import ughdhdh.bigtires.content.blocks.dye_station.WheelDyeStationScreen;
@@ -34,9 +33,7 @@ public class BigTiresNeoForgeClient {
                 event.register(BigTiresTintedObjLoader.ID, BigTiresTintedObjLoader.INSTANCE));
 
         // ItemColor: tintIndex 0 → TIRE_COLOR, 1 → RIM_COLOR. Регистрируется на все
-        // предметы неймспейса bigtires — независимо от того, используют они новый
-        // tinted_obj loader или ещё старую overlay-систему (в последнем случае tintIndex
-        // просто никогда не будет использован их моделью, регистрация безвредна).
+        // предметы неймспейса bigtires.
         modBus.addListener((RegisterColorHandlersEvent.Item event) -> {
             List<Item> wheelItems = new ArrayList<>();
             BuiltInRegistries.ITEM.forEach(item -> {
@@ -46,11 +43,9 @@ public class BigTiresNeoForgeClient {
             event.register(TintedWheelItemColor.INSTANCE, wheelItems.toArray(new Item[0]));
         });
 
-        // WheelColorOverlayRegistry.register() — ПОСЛЕ регистрации предметов.
-        modBus.addListener((FMLClientSetupEvent event) -> event.enqueueWork(() -> {
-            BigTiresPartialModels.init();
-            OffroadWheelColorCompat.init();
-        }));
+        // Зарезервировано для пост-регистрационной инициализации (см. BigTiresPartialModels.init()).
+        modBus.addListener((FMLClientSetupEvent event) -> event.enqueueWork(
+                BigTiresPartialModels::init));
 
         modBus.addListener((RegisterMenuScreensEvent event) ->
                 event.register(BigTiresMenuTypes.WHEEL_DYE_STATION.get(), WheelDyeStationScreen::new));

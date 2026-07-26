@@ -1,54 +1,144 @@
 package ughdhdh.bigtires.index;
 
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import net.minecraft.resources.ResourceLocation;
 import ughdhdh.bigtires.BigTires;
-import ughdhdh.bigtires.client.WheelColorOverlayRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * PartialModel-регистрация для BigTires.
  * <p>
  * <b>Колёса BigTires покрашены через {@code bigtires:tinted_obj} loader
  * (tintIndex по группам {@code tire}/{@code rim} в .obj — см. пакет
- * {@code ughdhdh.bigtires.client.tintedobj}), они НЕ используют overlay-модели
- * и не нуждаются в предрегистрации через {@link PartialModel#of} — их геометрия
- * запекается напрямую собственным loader'ом.</b>
+ * {@code ughdhdh.bigtires.client.tintedobj}), но на {@code WheelMount} они всё
+ * равно рендерятся через Flywheel {@link PartialModel}
+ * (см. {@code MotorcycleWheelMountRenderer}/{@code MixinWheelMountRenderer}).</b>
  * <p>
- * Overlay-система (tire_mask/rim_mask + {@link WheelColorOverlayRegistry}) теперь
- * актуальна ТОЛЬКО для колёс Offroad (см. {@code OffroadWheelColorCompat}) — их
- * .obj-файлы не в нашем распоряжении для перегруппировки на tire/rim, поэтому
- * для них старая раздельная geometry-overlay покраска остаётся единственным
- * рабочим способом.
+ * {@link PartialModel#of} использует {@code computeIfAbsent}: если модель уже
+ * была зарегистрирована ЗАРАНЕЕ (до {@code ModelBakeEvent}), она попадает в
+ * очередь допзапекания Flywheel, и после бака её {@code bakedModel} поле
+ * заполняется. Модели, никогда не зарегистрированные через {@link PartialModel#of}
+ * до бака, остаются с {@code bakedModel == null} навсегда — отсюда
+ * placeholder-блок вместо колеса на WheelMount, если модель тут не заведена.
  * <p>
- * {@link #registerModels()} вызывается из конструктора мода (до запекания) —
- * сейчас регистрирует только overlay-модели Offroad-совместимости.
+ * <b>ВАЖНО — {@code PartialModel.ALL} хранит значения через {@code WeakReference}
+ * ({@code new MapMaker().weakValues().makeMap()}).</b> Если ни один объект в
+ * программе не держит обычную (сильную) ссылку на результат {@link PartialModel#of},
+ * GC рано или поздно соберёт эту запись — и следующий вызов {@code .of()} для
+ * того же {@code ResourceLocation} создаст НОВЫЙ объект с {@code bakedModel == null},
+ * даже если модель БЫЛА зарегистрирована заранее и успешно запечена. Поэтому все
+ * результаты {@link PartialModel#of} обязаны быть сохранены в {@link #KEPT_ALIVE}.
+ * <p>
+ * <h3>Покраска на WheelMount — три под-модели на колесо</h3>
+ * {@code SuperByteBuffer.renderInto(...)} (используется и в
+ * {@code MotorcycleWheelMountRenderer}, и в {@code MixinWheelMountRenderer})
+ * рендерит буфер как есть, БЕЗ учёта tintIndex — это не полноценный блок-рендер
+ * с {@code BlockColors}, а прямая заливка предзапечённых вершин. tintIndex,
+ * работающий для айтемов через {@code ItemColor}, тут никак не резолвится.
+ * <p>
+ * Единственный способ покрасить часть модели через существующий движок —
+ * замешать цвет ДО рендера через {@code SuperByteBuffer.color(...)}, а он
+ * красит буфер целиком одним цветом. Значит шину и диск, которым нужны РАЗНЫЕ
+ * цвета, нельзя красить одним {@code renderInto} вызова — они должны быть
+ * ОТДЕЛЬНЫМИ баферами.
+ * <p>
+ * Поэтому для каждого колеса, помимо базовой {@code .../block} модели (используется
+ * только как fallback/для получения bounding-геометрии, не рендерится напрямую),
+ * зарегистрированы ТРИ под-модели с {@code only_tint_index} в JSON (см.
+ * {@code BigTiresTintedObjLoader}), содержащие каждая только часть исходного
+ * {@code .obj}:
+ * <ul>
+ *   <li>{@code block_tire} — грани группы {@code tire} (tintIndex 0)</li>
+ *   <li>{@code block_rim} — грани группы {@code rim} (tintIndex 1)</li>
+ *   <li>{@code block_neutral} — все остальные грани (например {@code shaft} у
+ *       {@code huge_rowing_tire}/{@code huge_rowing_wide_tire}) — без тинта,
+ *       у большинства колёс эта под-модель пустая (0 квадов) и просто не рендерит
+ *       ничего, что безвредно.</li>
+ * </ul>
+ * Рендерер красит первые два в {@code TIRE_COLOR}/{@code RIM_COLOR} (или белым
+ * — то есть без изменений — если компонент не задан), третий рендерит как есть.
+ * <p>
+ * {@link #registerModels()} вызывается из конструктора мода (до запекания).
  */
 public class BigTiresPartialModels {
+
+    /**
+     * Список путей (relative к {@code models/item/}) всех колёс BigTires,
+     * у которых есть {@code TireLike.model()} (см. {@code BigTireLikes}).
+     * Из каждого пути {@code <wheel>/block} выводятся {@code <wheel>/block_tire},
+     * {@code <wheel>/block_rim}, {@code <wheel>/block_neutral} — см. {@link #variantOf}.
+     */
+    private static final List<String> WHEEL_BASE_PATHS = List.of(
+            "huge_tire/block",
+            "huge_wide_tire/block",
+            "huge_rowing_tire/block",
+            "huge_rowing_wide_tire/block",
+            "big_tractor_tire/block",
+            "tractor_tire/block",
+            "truck_tire/block",
+            "narrow_truck_tire/block",
+            "small_truck_tire/block",
+            "monster_jam_tire/block",
+            "bamboo_wheel/block",
+            "vintage_tire/block",
+            "drift_tire/block",
+            "wooden_wheel/block",
+            "iron_wheel/block",
+            "traction_engine_wheel/block",
+            "small_traction_engine_wheel/block",
+            "steel_traction_engine_wheel/block",
+            "small_steel_traction_engine_wheel/block"
+    );
+
+    // Сильные ссылки на ВСЕ зарегистрированные PartialModel — живут всё время
+    // работы клиента, не дают GC собрать записи из PartialModel.ALL (weakValues!)
+    // до того, как Flywheel успеет заполнить их bakedModel после запекания.
+    private static final List<PartialModel> KEPT_ALIVE = new ArrayList<>();
 
     // ── Этап 1: статическая регистрация ДО запекания ──────────────────────────
 
     public static void registerModels() {
-        // Offroad compat overlay-модели (tire + rim) — единственное, что ещё
-        // нуждается в PartialModel-предрегистрации; колёса BigTires запекаются
-        // своим tinted_obj loader'ом и в этом списке не участвуют.
-        item("offroad_compat/small_tire_tire_mask");
-        item("offroad_compat/small_tire_rim_mask");
-        item("offroad_compat/tire_tire_mask");
-        item("offroad_compat/tire_rim_mask");
-        item("offroad_compat/large_tire_tire_mask");
-        item("offroad_compat/large_tire_rim_mask");
-        item("offroad_compat/monstrous_tire_tire_mask");
-        item("offroad_compat/monstrous_tire_rim_mask");
+        for (String basePath : WHEEL_BASE_PATHS) {
+            item(basePath);
+            item(basePath + "_tire");
+            item(basePath + "_rim");
+            item(basePath + "_neutral");
+        }
     }
 
-    // ── Этап 2: регистрация в оверлей-реестре после загрузки предметов ────────
+    // ── Этап 2: (в данный момент не используется) ──────────────────────────
 
     public static void init() {
-        // Пусто: у BigTires-колёс больше нет overlay-регистрации (см. javadoc класса).
-        // OffroadWheelColorCompat.init() регистрирует Offroad-совместимость отдельно —
-        // вызывается сразу следом в BigTiresNeoForgeClient.
+        // Пусто: у BigTires-колёс нет overlay-регистрации, они красятся через
+        // tintIndex кастомного tinted_obj loader'а (см. javadoc класса).
+    }
+
+    // ── Доступ из рендереров ────────────────────────────────────────────────
+
+    /** {@code .../block_tire} под-модель для базовой модели {@code baseModelRL} (например {@code TireLike.model()}). */
+    public static PartialModel tireVariant(ResourceLocation baseModelRL) {
+        return PartialModel.of(variantOf(baseModelRL, "_tire"));
+    }
+
+    /** {@code .../block_rim} под-модель для базовой модели {@code baseModelRL}. */
+    public static PartialModel rimVariant(ResourceLocation baseModelRL) {
+        return PartialModel.of(variantOf(baseModelRL, "_rim"));
+    }
+
+    /** {@code .../block_neutral} под-модель для базовой модели {@code baseModelRL} (нетонированные грани). */
+    public static PartialModel neutralVariant(ResourceLocation baseModelRL) {
+        return PartialModel.of(variantOf(baseModelRL, "_neutral"));
+    }
+
+    private static ResourceLocation variantOf(ResourceLocation baseModelRL, String suffix) {
+        return ResourceLocation.fromNamespaceAndPath(baseModelRL.getNamespace(), baseModelRL.getPath() + suffix);
     }
 
     private static PartialModel item(final String path) {
-        return PartialModel.of(BigTires.path("item/" + path));
+        PartialModel model = PartialModel.of(BigTires.path("item/" + path));
+        KEPT_ALIVE.add(model);
+        return model;
     }
 }

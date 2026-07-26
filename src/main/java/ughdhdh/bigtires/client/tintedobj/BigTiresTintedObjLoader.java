@@ -39,7 +39,14 @@ import java.util.Map;
  *     },
  *     "automatic_culling": false,
  *     "shade_quads": false,
- *     "flip_v": true
+ *     "flip_v": true,
+ *     // Опционально: если указано, при запекании остаются ТОЛЬКО грани, чей
+ *     // резолвленный tintIndex (через tint_groups, см. выше) равен этому числу.
+ *     // Позволяет получить из одного .obj НЕСКОЛЬКО независимо красящихся
+ *     // под-моделей (например "только шина" / "только диск" / "остальное,
+ *     // без тинта" — используется для покраски колёс на WheelMount, см.
+ *     // ughdhdh.bigtires.index.BigTiresPartialModels).
+ *     "only_tint_index": 0
  * }
  * }</pre>
  */
@@ -79,9 +86,11 @@ public final class BigTiresTintedObjLoader implements IGeometryLoader<BigTiresTi
         boolean shadeQuads       = !json.has("shade_quads") || json.get("shade_quads").getAsBoolean();
         boolean flipV            = json.has("flip_v") && json.get("flip_v").getAsBoolean();
 
+        Integer onlyTintIndex = json.has("only_tint_index") ? json.get("only_tint_index").getAsInt() : null;
+
         return new BigTiresTintedObjGeometry(
                 objData, materials, materialToTextureKey, tintGroups,
-                automaticCulling, shadeQuads, flipV
+                automaticCulling, shadeQuads, flipV, onlyTintIndex
         );
     }
 

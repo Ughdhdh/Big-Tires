@@ -18,8 +18,7 @@ import ughdhdh.bigtires.index.BigTiresMenuTypes;
  *   [Краситель шины]  [Колесо]  [Краситель диска]
  *       (44, 35)     (80, 35)     (116, 35)
  * </pre>
- * Кнопка «Покрасить»: {@link #clickMenuButton(Player, int)} с id=0.<br>
- * Кнопка «Сбросить»:  {@link #clickMenuButton(Player, int)} с id=1.
+ * Кнопка «Покрасить»: {@link #clickMenuButton(Player, int)} с id=0.
  */
 public class WheelDyeStationMenu extends AbstractContainerMenu {
 
@@ -83,7 +82,6 @@ public class WheelDyeStationMenu extends AbstractContainerMenu {
      * Обрабатывает нажатие кнопок:
      * <ul>
      *   <li>id=0 → применить красители</li>
-     *   <li>id=1 → сбросить цвет к заводским</li>
      * </ul>
      */
     @Override
@@ -91,7 +89,6 @@ public class WheelDyeStationMenu extends AbstractContainerMenu {
         access.execute((level, pos) -> {
             if (level.getBlockEntity(pos) instanceof WheelDyeStationBlockEntity be) {
                 if (id == 0) be.applyDyes();
-                else if (id == 1) be.resetColor();
                 broadcastChanges();
             }
         });

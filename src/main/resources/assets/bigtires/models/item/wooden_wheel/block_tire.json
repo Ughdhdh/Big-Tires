@@ -1,0 +1,16 @@
+{
+	"loader": "bigtires:tinted_obj",
+	"model": "bigtires:models/item/wooden_wheel/wooden_wheel.obj",
+	"textures": {
+		"wooden_wheel": "bigtires:block/wooden_wheel",
+		"particle": "bigtires:block/wooden_wheel"
+	},
+	"tint_groups": {
+		"tire": 0,
+		"rim": 1
+	},
+	"automatic_culling": false,
+	"shade_quads": true,
+	"flip_v": true,
+	"only_tint_index": 0
+}

@@ -85,14 +85,6 @@ public class WheelDyeStationBlockEntity extends BlockEntity implements MenuProvi
         if (changed) setChanged();
     }
 
-    public void resetColor() {
-        ItemStack wheelStack = items[SLOT_WHEEL];
-        if (wheelStack.isEmpty()) return;
-        wheelStack.remove(BigTiresComponents.TIRE_COLOR);
-        wheelStack.remove(BigTiresComponents.RIM_COLOR);
-        setChanged();
-    }
-
     @Override public int getContainerSize()  { return CONTAINER_SIZE; }
     @Override public boolean isEmpty()       { for (var s : items) if (!s.isEmpty()) return false; return true; }
     @Override public ItemStack getItem(int slot) { return items[slot]; }

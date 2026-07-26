@@ -25,8 +25,11 @@ import java.util.function.Function;
  * <p>
  * Хранит распарсенные {@code .obj}+{@code .mtl} данные (см. {@link BigTiresObjData},
  * {@link BigTiresMtlParser}) плюс настройки из model JSON: связку материал→текстурный
- * ключ ({@code textures}), связку имя группы→tintIndex ({@code tint_groups}) и флаги
- * ({@code automatic_culling}, {@code shade_quads}, {@code flip_v}).
+ * ключ ({@code textures}), связку имя группы→tintIndex ({@code tint_groups}), флаги
+ * ({@code automatic_culling}, {@code shade_quads}, {@code flip_v}) и опциональный
+ * фильтр {@code only_tint_index} (см. {@link #onlyTintIndex}) — позволяет запечь из
+ * одного {@code .obj} несколько независимо красящихся под-моделей (используется
+ * для покраски колёс на WheelMount, см. {@code ughdhdh.bigtires.index.BigTiresPartialModels}).
  * <p>
  * {@link #bake} превращает всё это в список {@link BakedQuad}, готовых к рендеру —
  * ОДИН РАЗ при запекании модели, не на каждый кадр.
@@ -42,6 +45,9 @@ public final class BigTiresTintedObjGeometry implements IUnbakedGeometry<BigTire
     private final boolean automaticCulling;
     private final boolean shadeQuads;
     private final boolean flipV;
+    /** Если не null — при запекании остаются только грани с этим резолвленным tintIndex. */
+    @Nullable
+    private final Integer onlyTintIndex;
 
     public BigTiresTintedObjGeometry(BigTiresObjData objData,
                                      Map<String, BigTiresMtlParser.Material> materials,
@@ -49,7 +55,8 @@ public final class BigTiresTintedObjGeometry implements IUnbakedGeometry<BigTire
                                      Map<String, Integer> tintGroups,
                                      boolean automaticCulling,
                                      boolean shadeQuads,
-                                     boolean flipV) {
+                                     boolean flipV,
+                                     @Nullable Integer onlyTintIndex) {
         this.objData = objData;
         this.materials = materials;
         this.materialToTextureKey = materialToTextureKey;
@@ -57,6 +64,7 @@ public final class BigTiresTintedObjGeometry implements IUnbakedGeometry<BigTire
         this.automaticCulling = automaticCulling;
         this.shadeQuads = shadeQuads;
         this.flipV = flipV;
+        this.onlyTintIndex = onlyTintIndex;
     }
 
     @Override
@@ -68,8 +76,10 @@ public final class BigTiresTintedObjGeometry implements IUnbakedGeometry<BigTire
         List<BakedQuad> quads = new ArrayList<>(objData.faces.size());
 
         for (BigTiresObjData.Face face : objData.faces) {
-            TextureAtlasSprite sprite = resolveSprite(context, spriteGetter, face.materialName());
             int tintIndex = resolveTintIndex(face.groupName());
+            if (onlyTintIndex != null && tintIndex != onlyTintIndex) continue;
+
+            TextureAtlasSprite sprite = resolveSprite(context, spriteGetter, face.materialName());
             quads.add(bakeQuad(context, face, sprite, tintIndex, transform));
         }
 
@@ -81,7 +91,8 @@ public final class BigTiresTintedObjGeometry implements IUnbakedGeometry<BigTire
                 context.isGui3d(),
                 context.useBlockLight(),
                 particle,
-                overrides
+                overrides,
+                context.getTransforms()
         );
     }
 
@@ -91,29 +102,6 @@ public final class BigTiresTintedObjGeometry implements IUnbakedGeometry<BigTire
     }
 
     // ── Резолвинг текстуры и тинта ──────────────────────────────────────────
-
-    // ── ВРЕМЕННАЯ ДИАГНОСТИКА ──────────────────────────────────────────────
-    private static final org.slf4j.Logger BIGTIRES_OBJ_LOG =
-            org.slf4j.LoggerFactory.getLogger("BigTires-TintedObj-DEBUG");
-    private static final java.util.concurrent.atomic.AtomicInteger BIGTIRES_OBJ_LOG_COUNT =
-            new java.util.concurrent.atomic.AtomicInteger(0);
-    private static final int BIGTIRES_OBJ_LOG_LIMIT = 40;
-
-    private static void objLog(String msg) {
-        if (BIGTIRES_OBJ_LOG_COUNT.getAndIncrement() < BIGTIRES_OBJ_LOG_LIMIT) {
-            BIGTIRES_OBJ_LOG.info("[BigTires-TintedObj-DEBUG] {}", msg);
-        }
-    }
-
-    private static final java.util.concurrent.atomic.AtomicInteger BIGTIRES_UV_LOG_COUNT =
-            new java.util.concurrent.atomic.AtomicInteger(0);
-    private static final int BIGTIRES_UV_LOG_LIMIT = 30;
-
-    private static void objLogUv(String msg) {
-        if (BIGTIRES_UV_LOG_COUNT.getAndIncrement() < BIGTIRES_UV_LOG_LIMIT) {
-            BIGTIRES_OBJ_LOG.info("[BigTires-TintedObj-UV-DEBUG] {}", msg);
-        }
-    }
 
     private TextureAtlasSprite resolveSprite(IGeometryBakingContext context,
                                              Function<Material, TextureAtlasSprite> spriteGetter,
@@ -125,22 +113,12 @@ public final class BigTiresTintedObjGeometry implements IUnbakedGeometry<BigTire
                 // map_Kd в .mtl обычно ссылается на #<ключ>, но materialToTextureKey из JSON
                 // может явно переопределить это соответствие — приоритет у явного JSON-маппинга.
                 textureKey = materialToTextureKey.getOrDefault(mat.diffuseTextureKey(), mat.diffuseTextureKey());
-            } else {
-                objLog("materialName='" + materialName + "' НЕ найден в materials.keySet()="
-                        + materials.keySet() + " (или diffuseTextureKey==null)");
             }
         }
         if (textureKey == null) textureKey = "particle"; // разумный fallback
 
-        boolean has = context.hasMaterial(textureKey);
         Material material = context.getMaterial(textureKey);
-        TextureAtlasSprite sprite = spriteGetter.apply(material);
-
-        objLog("textureKey='" + textureKey + "' hasMaterial=" + has
-                + " material.texture()=" + material.texture()
-                + " → sprite.contents().name()=" + sprite.contents().name());
-
-        return sprite;
+        return spriteGetter.apply(material);
     }
 
     private int resolveTintIndex(@Nullable String groupName) {
@@ -167,14 +145,9 @@ public final class BigTiresTintedObjGeometry implements IUnbakedGeometry<BigTire
 
         for (BigTiresObjData.VertexRef ref : face.vertices()) {
             Vector3f rawPos = objData.positions.get(ref.positionIndex());
-            // Blockbench экспортирует координаты в масштабе "16 единиц = 1 блок"
-            // (та же конвенция, что у ванильных block-model "elements": from/to 0-16).
-            // Без деления на 16 геометрия рендерится в 16 раз больше нужного размера.
-            // ВРЕМЕННО: деление на 16 убрано — оно перекорректировало размер
-            // (было "огромный", стало "очень маленький"), значит гипотеза про
-            // конвенцию Blockbench была неверной или тут двойное масштабирование
-            // где-то ещё. Нужно определить реальный источник "огромного" размера
-            // отдельно, прежде чем добавлять сюда какой-либо коэффициент.
+            // В отличие от ванильных block-model "elements" (диапазон 0-16 на блок),
+            // экспорт этого .obj уже в блоках (1 единица = 1 блок) — координаты
+            // используются как есть, без масштабирования.
             Vector4f pos4 = new Vector4f(rawPos.x, rawPos.y, rawPos.z, 1.0f);
             transform.transformPosition(pos4);
 
@@ -193,19 +166,11 @@ public final class BigTiresTintedObjGeometry implements IUnbakedGeometry<BigTire
                 v = flipV ? 1.0f - uv.y : uv.y;
             }
 
-            // sprite.getU/getV принимают диапазон 0-16 (ванильная конвенция), не 0-1.
-            // sprite.getU/getV в этой версии API принимают диапазон 0-1 НАПРЯМУЮ,
+            // sprite.getU/getV в этой версии API принимают диапазон 0-1 напрямую,
             // не 0-16 (та старая конвенция была для более ранней версии, до overhaul'а
-            // системы вершин между 1.20.6 и 1.21). Подтверждено расчётом по логу:
-            // с ×16 атласная координата вылетала далеко за границы спрайта, отсюда
-            // была "рябь" из чужих текстур атласа.
+            // системы вершин между 1.20.6 и 1.21).
             float atlasU = sprite.getU(u);
             float atlasV = sprite.getV(v);
-            objLogUv("raw uv=(" + u + "," + v + ") atlas=(" + atlasU + "," + atlasV + ")"
-                    + " sprite=" + sprite.contents().name()
-                    + " spriteU0-U1=[" + sprite.getU0() + "," + sprite.getU1() + "]"
-                    + " spriteV0-V1=[" + sprite.getV0() + "," + sprite.getV1() + "]"
-                    + " pos=(" + pos4.x + "," + pos4.y + "," + pos4.z + ")");
 
             consumer.addVertex(pos4.x, pos4.y, pos4.z);
             consumer.setColor(255, 255, 255, 255); // белый — тинт применяется отдельно через tintIndex
