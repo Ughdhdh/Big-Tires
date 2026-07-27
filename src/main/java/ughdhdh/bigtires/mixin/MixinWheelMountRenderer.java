@@ -35,8 +35,10 @@ import dev.ryanhcode.offroad.index.OffroadDataComponents;
  *       не резолвит tintIndex сам по себе (это не полноценный блок-рендер с
  *       {@code BlockColors}, а прямая заливка уже запечённых вершин), поэтому
  *       вместо базового (некрашенного) буфера {@code buf}, который строит само
- *       Offroad, рендерятся ТРИ отдельные под-модели с уже применённым цветом —
- *       см. {@link BigTiresPartialModels}.</li>
+ *       Offroad, рендерятся отдельные под-модели с уже применённым цветом —
+ *       см. {@link BigTiresPartialModels} (при заданном цвете берётся
+ *       десатурированный {@code *_dyed} вариант текстуры + тинт, иначе — обычный
+ *       вариант без тинта).</li>
  * </ol>
  * <h3>Два раздельных пути рендера базовой шины в оригинальном коде Offroad</h3>
  * Судя по реальному исходнику {@code WheelMountRenderer.renderSafe()}, шина
@@ -105,8 +107,14 @@ public class MixinWheelMountRenderer {
             Integer tireColor = stack.get(BigTiresComponents.TIRE_COLOR);
             Integer rimColor  = stack.get(BigTiresComponents.RIM_COLOR);
 
-            bigtires$renderTintedPart(ms, vc, BigTiresPartialModels.tireVariant(baseModelRL), tireColor);
-            bigtires$renderTintedPart(ms, vc, BigTiresPartialModels.rimVariant(baseModelRL), rimColor);
+            bigtires$renderTintedPart(ms, vc,
+                    tireColor != null ? BigTiresPartialModels.tireVariantDyed(baseModelRL)
+                                       : BigTiresPartialModels.tireVariant(baseModelRL),
+                    tireColor);
+            bigtires$renderTintedPart(ms, vc,
+                    rimColor != null ? BigTiresPartialModels.rimVariantDyed(baseModelRL)
+                                     : BigTiresPartialModels.rimVariant(baseModelRL),
+                    rimColor);
             bigtires$renderTintedPart(ms, vc, BigTiresPartialModels.neutralVariant(baseModelRL), null);
         } else {
             // Подстраховка: модели нет (не должно происходить в этой ветке) — рендерим как раньше.

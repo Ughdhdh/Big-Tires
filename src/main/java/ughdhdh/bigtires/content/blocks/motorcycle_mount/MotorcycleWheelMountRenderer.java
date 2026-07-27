@@ -108,12 +108,19 @@ public class MotorcycleWheelMountRenderer
                     }
                 }
 
-                // Три независимо красящихся под-буфера (см. BigTiresPartialModels):
-                // "tire" и "rim" красятся выбранным цветом (или белым — без изменений,
-                // если ещё не покрашено), "neutral" (например ось у huge_rowing_tire)
-                // рендерится как есть, без тинта.
-                renderTintedPart(ms, vb, BigTiresPartialModels.tireVariant(baseModelRL), state, light, tireColor);
-                renderTintedPart(ms, vb, BigTiresPartialModels.rimVariant(baseModelRL), state, light, rimColor);
+                // Раздельные под-буферы (см. BigTiresPartialModels): если цвет задан —
+                // рендерим ДЕСАТУРИРОВАННЫЙ ("_dyed") вариант текстуры с тинтом (чистый
+                // colorize-эффект без смешивания с родным оттенком текстуры); если нет —
+                // обычный вариант с оригинальной текстурой, без тинта (естественный вид).
+                // "neutral" (например ось у huge_rowing_tire) — всегда как есть, без тинта.
+                renderTintedPart(ms, vb,
+                        tireColor != null ? BigTiresPartialModels.tireVariantDyed(baseModelRL)
+                                           : BigTiresPartialModels.tireVariant(baseModelRL),
+                        state, light, tireColor);
+                renderTintedPart(ms, vb,
+                        rimColor != null ? BigTiresPartialModels.rimVariantDyed(baseModelRL)
+                                         : BigTiresPartialModels.rimVariant(baseModelRL),
+                        state, light, rimColor);
                 renderTintedPart(ms, vb, BigTiresPartialModels.neutralVariant(baseModelRL), state, light, null);
 
             } else {

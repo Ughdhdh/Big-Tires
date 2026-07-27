@@ -31,7 +31,7 @@ import java.util.List;
  * даже если модель БЫЛА зарегистрирована заранее и успешно запечена. Поэтому все
  * результаты {@link PartialModel#of} обязаны быть сохранены в {@link #KEPT_ALIVE}.
  * <p>
- * <h3>Покраска на WheelMount — три под-модели на колесо</h3>
+ * <h3>Покраска на WheelMount — раздельные под-модели на колесо</h3>
  * {@code SuperByteBuffer.renderInto(...)} (используется и в
  * {@code MotorcycleWheelMountRenderer}, и в {@code MixinWheelMountRenderer})
  * рендерит буфер как есть, БЕЗ учёта tintIndex — это не полноценный блок-рендер
@@ -46,19 +46,30 @@ import java.util.List;
  * <p>
  * Поэтому для каждого колеса, помимо базовой {@code .../block} модели (используется
  * только как fallback/для получения bounding-геометрии, не рендерится напрямую),
- * зарегистрированы ТРИ под-модели с {@code only_tint_index} в JSON (см.
+ * зарегистрированы под-модели с {@code only_tint_index} в JSON (см.
  * {@code BigTiresTintedObjLoader}), содержащие каждая только часть исходного
  * {@code .obj}:
  * <ul>
- *   <li>{@code block_tire} — грани группы {@code tire} (tintIndex 0)</li>
- *   <li>{@code block_rim} — грани группы {@code rim} (tintIndex 1)</li>
+ *   <li>{@code block_tire} — грани группы {@code tire} (tintIndex 0), оригинальная текстура</li>
+ *   <li>{@code block_rim} — грани группы {@code rim} (tintIndex 1), оригинальная текстура</li>
  *   <li>{@code block_neutral} — все остальные грани (например {@code shaft} у
  *       {@code huge_rowing_tire}/{@code huge_rowing_wide_tire}) — без тинта,
  *       у большинства колёс эта под-модель пустая (0 квадов) и просто не рендерит
  *       ничего, что безвредно.</li>
+ *   <li>{@code block_tire_dyed} / {@code block_rim_dyed} — ТЕ ЖЕ грани, но с
+ *       десатурированной (полностью обесцвеченной, см. {@code *_dyed_base.png})
+ *       версией текстуры. Используются ТОЛЬКО когда реально выбран цвет
+ *       ({@code TIRE_COLOR}/{@code RIM_COLOR} присутствует) — иначе рендер шёл бы
+ *       по оригинальной, местами уже не нейтральной текстуре (дерево, ржавчина
+ *       и т.п.), и умножение на выбранный цвет давало бы грязный/неправильный
+ *       оттенок. Десатурация здесь — на уровне ассета (PNG), а не кода: обычный
+ *       tintIndex-множитель в стандартном шейдере блоков и так делает
+ *       per-pixel {@code texture × vertexColor} — достаточно, чтобы текстура
+ *       была нейтральной, чтобы получить чистый "colorize"-эффект.</li>
  * </ul>
- * Рендерер красит первые два в {@code TIRE_COLOR}/{@code RIM_COLOR} (или белым
- * — то есть без изменений — если компонент не задан), третий рендерит как есть.
+ * Рендерер выбирает: цвет задан → {@code *_dyed} вариант + tint; цвет не задан →
+ * обычный вариант без тинта (естественный вид). {@code block_neutral} рендерится
+ * как есть в любом случае.
  * <p>
  * {@link #registerModels()} вызывается из конструктора мода (до запекания).
  */
@@ -68,7 +79,8 @@ public class BigTiresPartialModels {
      * Список путей (relative к {@code models/item/}) всех колёс BigTires,
      * у которых есть {@code TireLike.model()} (см. {@code BigTireLikes}).
      * Из каждого пути {@code <wheel>/block} выводятся {@code <wheel>/block_tire},
-     * {@code <wheel>/block_rim}, {@code <wheel>/block_neutral} — см. {@link #variantOf}.
+     * {@code <wheel>/block_rim}, {@code <wheel>/block_neutral},
+     * {@code <wheel>/block_tire_dyed}, {@code <wheel>/block_rim_dyed} — см. {@link #variantOf}.
      */
     private static final List<String> WHEEL_BASE_PATHS = List.of(
             "huge_tire/block",
@@ -105,6 +117,8 @@ public class BigTiresPartialModels {
             item(basePath + "_tire");
             item(basePath + "_rim");
             item(basePath + "_neutral");
+            item(basePath + "_tire_dyed");
+            item(basePath + "_rim_dyed");
         }
     }
 
@@ -117,19 +131,29 @@ public class BigTiresPartialModels {
 
     // ── Доступ из рендереров ────────────────────────────────────────────────
 
-    /** {@code .../block_tire} под-модель для базовой модели {@code baseModelRL} (например {@code TireLike.model()}). */
+    /** {@code .../block_tire} под-модель (естественная текстура, без тинта) для {@code baseModelRL}. */
     public static PartialModel tireVariant(ResourceLocation baseModelRL) {
         return PartialModel.of(variantOf(baseModelRL, "_tire"));
     }
 
-    /** {@code .../block_rim} под-модель для базовой модели {@code baseModelRL}. */
+    /** {@code .../block_rim} под-модель (естественная текстура, без тинта) для {@code baseModelRL}. */
     public static PartialModel rimVariant(ResourceLocation baseModelRL) {
         return PartialModel.of(variantOf(baseModelRL, "_rim"));
     }
 
-    /** {@code .../block_neutral} под-модель для базовой модели {@code baseModelRL} (нетонированные грани). */
+    /** {@code .../block_neutral} под-модель для {@code baseModelRL} (нетонированные грани). */
     public static PartialModel neutralVariant(ResourceLocation baseModelRL) {
         return PartialModel.of(variantOf(baseModelRL, "_neutral"));
+    }
+
+    /** {@code .../block_tire_dyed} — десатурированная текстура, использовать вместе с {@code .color(tireColor)}. */
+    public static PartialModel tireVariantDyed(ResourceLocation baseModelRL) {
+        return PartialModel.of(variantOf(baseModelRL, "_tire_dyed"));
+    }
+
+    /** {@code .../block_rim_dyed} — десатурированная текстура, использовать вместе с {@code .color(rimColor)}. */
+    public static PartialModel rimVariantDyed(ResourceLocation baseModelRL) {
+        return PartialModel.of(variantOf(baseModelRL, "_rim_dyed"));
     }
 
     private static ResourceLocation variantOf(ResourceLocation baseModelRL, String suffix) {

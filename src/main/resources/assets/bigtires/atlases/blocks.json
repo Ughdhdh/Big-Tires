@@ -1,0 +1,99 @@
+{
+	"sources": [
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/huge_tire",
+			"sprite": "bigtires:block/huge_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/huge_wide_tire",
+			"sprite": "bigtires:block/huge_wide_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/huge_rowing_tire",
+			"sprite": "bigtires:block/huge_rowing_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/huge_rowing_wide_tire",
+			"sprite": "bigtires:block/huge_rowing_wide_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/big_tractor_tire",
+			"sprite": "bigtires:block/big_tractor_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/tractor_tire",
+			"sprite": "bigtires:block/tractor_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/truck_tire",
+			"sprite": "bigtires:block/truck_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/narrow_truck_tire",
+			"sprite": "bigtires:block/narrow_truck_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/small_truck_tire",
+			"sprite": "bigtires:block/small_truck_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/monster_jam_tire",
+			"sprite": "bigtires:block/monster_jam_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/bamboo_wheel",
+			"sprite": "bigtires:block/bamboo_wheel_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/vintage_tire",
+			"sprite": "bigtires:block/vintage_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/drift_tire",
+			"sprite": "bigtires:block/drift_tire_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/wooden_wheel",
+			"sprite": "bigtires:block/wooden_wheel_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/iron_wheel",
+			"sprite": "bigtires:block/iron_wheel_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/traction_engine_wheel",
+			"sprite": "bigtires:block/traction_engine_wheel_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/small_traction_engine_wheel",
+			"sprite": "bigtires:block/small_traction_engine_wheel_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/steel_traction_engine_wheel",
+			"sprite": "bigtires:block/steel_traction_engine_wheel_dyed_base"
+		},
+		{
+			"type": "bigtires:desaturate",
+			"source": "bigtires:block/small_steel_traction_engine_wheel",
+			"sprite": "bigtires:block/small_steel_traction_engine_wheel_dyed_base"
+		}
+	]
+}

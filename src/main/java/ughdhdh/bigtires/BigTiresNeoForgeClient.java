@@ -11,7 +11,9 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RegisterSpriteSourceTypesEvent;
 import ughdhdh.bigtires.client.tintedobj.BigTiresTintedObjLoader;
+import ughdhdh.bigtires.client.tintedobj.DesaturateSpriteSource;
 import ughdhdh.bigtires.client.tintedobj.TintedWheelItemColor;
 import ughdhdh.bigtires.content.blocks.dye_station.WheelDyeStationScreen;
 import ughdhdh.bigtires.index.BigTiresMenuTypes;
@@ -31,6 +33,14 @@ public class BigTiresNeoForgeClient {
         // Собственный geometry loader — tintIndex-покраска колёс без overlay-геометрии.
         modBus.addListener((ModelEvent.RegisterGeometryLoaders event) ->
                 event.register(BigTiresTintedObjLoader.ID, BigTiresTintedObjLoader.INSTANCE));
+
+        // Кастомный SpriteSource ("bigtires:desaturate") — генерирует *_dyed_base
+        // спрайты (десатурированные версии текстур колёс) на лету при стежке атласа,
+        // без отдельных PNG-файлов в репозитории. См. assets/bigtires/atlases/blocks.json
+        // и javadoc DesaturateSpriteSource.
+        modBus.addListener((RegisterSpriteSourceTypesEvent event) ->
+                event.register(ResourceLocation.fromNamespaceAndPath(BigTires.MOD_ID, "desaturate"),
+                        DesaturateSpriteSource.CODEC));
 
         // ItemColor: tintIndex 0 → TIRE_COLOR, 1 → RIM_COLOR. Регистрируется на все
         // предметы неймспейса bigtires.
