@@ -18,7 +18,7 @@ public class BigTiresBlockEntityTypes {
                 MotorcycleWheelMountBlockEntity::new)
             .onRegister(SimInventoryService.INSTANCE
                 .registerInventory((be, dir) -> be.getInventory()))
-            .validBlocks(BigTiresBlocks.MOTORCYCLE_WHEEL_MOUNT)
+            // .validBlocks(BigTiresBlocks.MOTORCYCLE_WHEEL_MOUNT)
             .renderer(() -> MotorcycleWheelMountRenderer::new)
             .register();
 

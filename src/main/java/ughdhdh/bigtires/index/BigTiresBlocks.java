@@ -15,6 +15,7 @@ public class BigTiresBlocks {
 
     private static final SimulatedRegistrate REGISTRATE = BigTires.getRegistrate();
 
+    /*
     public static final BlockEntry<MotorcycleWheelMountBlock> MOTORCYCLE_WHEEL_MOUNT =
             REGISTRATE.block("motorcycle_wheel_mount", MotorcycleWheelMountBlock::new)
                     .initialProperties(SharedProperties::softMetal)
@@ -28,8 +29,8 @@ public class BigTiresBlocks {
                     .item()
                     .build()
                     .register();
+    */
 
-    /** Покрасочная станция для колёс (краска шины + краска диска). */
     public static final BlockEntry<WheelDyeStationBlock> WHEEL_DYE_STATION =
             REGISTRATE.block("wheel_dye_station", WheelDyeStationBlock::new)
                     .initialProperties(SharedProperties::softMetal)
