@@ -16,27 +16,16 @@ import java.util.List;
  */
 public final class BigTiresObjData {
 
-    /** Позиции вершин ({@code v x y z}), индексация с 0 (в файле — с 1, парсер уже пересчитал). */
+
     public final List<Vector3f> positions = new ArrayList<>();
 
     /** UV-координаты ({@code vt u v}), индексация с 0. */
     public final List<Vector2f> texCoords = new ArrayList<>();
 
-    /** Нормали ({@code vn x y z}), индексация с 0. Может быть пустым, если модель их не содержит. */
     public final List<Vector3f> normals = new ArrayList<>();
 
-    /** Все грани модели, в порядке появления в файле. */
     public final List<Face> faces = new ArrayList<>();
 
-    /**
-     * Одна грань (после triangulation остаётся ровно 4 вершины — см. {@link BigTiresObjParser}).
-     *
-     * @param materialName активный материал ({@code usemtl}) на момент этой грани; может быть {@code null},
-     *                     если в файле не было ни одного {@code usemtl} до этой грани.
-     * @param groupName    активная группа ({@code o}/{@code g}) на момент этой грани; может быть {@code null}.
-     * @param vertices     ровно 4 вершины грани (квад). Если исходная грань была треугольником,
-     *                     последняя вершина продублирована (см. {@link BigTiresObjParser#toQuad}).
-     */
     public record Face(String materialName, String groupName, VertexRef[] vertices) {}
 
     /**

@@ -101,7 +101,7 @@ public final class BigTiresTintedObjGeometry implements IUnbakedGeometry<BigTire
         // Наша геометрия не ссылается на другие модели — резолвить нечего.
     }
 
-    // ── Резолвинг текстуры и тинта ──────────────────────────────────────────
+    // ── Резолвинг текстуры и тинта
 
     private TextureAtlasSprite resolveSprite(IGeometryBakingContext context,
                                              Function<Material, TextureAtlasSprite> spriteGetter,
@@ -127,7 +127,7 @@ public final class BigTiresTintedObjGeometry implements IUnbakedGeometry<BigTire
         return idx != null ? idx : -1;
     }
 
-    // ── Baking одной грани (уже гарантированно квад — см. BigTiresObjParser) ──
+    // ── Baking одной грани (уже гарантированно квад — см. BigTiresObjParser)
 
     private BakedQuad bakeQuad(IGeometryBakingContext context, BigTiresObjData.Face face, TextureAtlasSprite sprite,
                                int tintIndex, Transformation transform) {

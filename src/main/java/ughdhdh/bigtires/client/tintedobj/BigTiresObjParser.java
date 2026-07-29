@@ -6,28 +6,6 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Парсер текста Wavefront {@code .obj}. Поддерживает полный набор директив,
- * реально встречающихся в экспорте Blockbench (и большинства других редакторов):
- * <ul>
- *   <li>{@code v x y z} — позиция вершины</li>
- *   <li>{@code vt u v} — UV-координата</li>
- *   <li>{@code vn x y z} — нормаль</li>
- *   <li>{@code f ...} — грань, ЛЮБОЕ число вершин (3, 4, 5+), формат вершины
- *       {@code pos}, {@code pos/uv}, {@code pos//normal} или {@code pos/uv/normal}</li>
- *   <li>Отрицательные (relative) индексы — {@code -1} значит "последняя добавленная вершина"</li>
- *   <li>{@code usemtl <name>} — переключает активный материал для последующих граней</li>
- *   <li>{@code o <name>} / {@code g <name>} — переключает активную группу (используется для tintIndex)</li>
- *   <li>{@code mtllib}, {@code s}, {@code #} — распознаются и пропускаются
- *       (material library грузится отдельно через {@link BigTiresMtlParser}, smoothing groups не используются)</li>
- * </ul>
- * <p>
- * <b>N-угольники:</b> любая грань с 5+ вершинами веерно триангулируется
- * (fan triangulation: v0,v1,v2 / v0,v2,v3 / v0,v3,v4 / ...), каждый треугольник
- * затем превращается в квад дублированием последней вершины — см. {@link #toQuad}.
- * Это стандартный, надёжный способ поддержать произвольную геометрию без
- * потери формы (грани остаются плоскими и корректно текстурированными).
- */
 public final class BigTiresObjParser {
 
     private BigTiresObjParser() {}

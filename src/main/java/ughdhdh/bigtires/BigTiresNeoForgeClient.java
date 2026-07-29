@@ -36,11 +36,13 @@ public class BigTiresNeoForgeClient {
 
         // Кастомный SpriteSource ("bigtires:desaturate") — генерирует *_dyed_base
         // спрайты (десатурированные версии текстур колёс) на лету при стежке атласа,
-        // без отдельных PNG-файлов в репозитории. См. assets/bigtires/atlases/blocks.json
+        // без отдельных PNG-файлов в репозитории. См. assets/minecraft/atlases/blocks.json
+        // (ВАЖНО: именно namespace minecraft, не bigtires — иначе файл не подхватится,
+        // см. javadoc DesaturateSpriteSource)
         // и javadoc DesaturateSpriteSource.
         modBus.addListener((RegisterSpriteSourceTypesEvent event) ->
                 event.register(ResourceLocation.fromNamespaceAndPath(BigTires.MOD_ID, "desaturate"),
-                        DesaturateSpriteSource.CODEC));
+                        DesaturateSpriteSource.TYPE));
 
         // ItemColor: tintIndex 0 → TIRE_COLOR, 1 → RIM_COLOR. Регистрируется на все
         // предметы неймспейса bigtires.

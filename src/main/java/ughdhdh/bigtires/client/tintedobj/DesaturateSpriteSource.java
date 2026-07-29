@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.resources.metadata.animation.FrameSize;
 import net.minecraft.client.renderer.texture.SpriteContents;
-import net.minecraft.client.renderer.texture.atlas.SpriteResourceLoader;
 import net.minecraft.client.renderer.texture.atlas.SpriteSource;
 import net.minecraft.client.renderer.texture.atlas.SpriteSourceType;
 import net.minecraft.resources.ResourceLocation;
@@ -19,10 +18,10 @@ import java.io.InputStream;
 import java.util.Optional;
 
 /**
- * Кастомный {@link SpriteSource} ({@code "type": "bigtires:desaturate"} в
- * {@code assets/bigtires/atlases/blocks.json}) — читает исходную текстуру
- * ({@code source}), убирает у неё насыщенность (luminance-preserving grayscale,
- * альфа не трогается) и кладёт результат в атлас под ID {@code sprite}.
+ * Кастомный {@link SpriteSource} ({@code "type": "bigtires:desaturate"}) — читает
+ * исходную текстуру ({@code source}), убирает у неё насыщенность
+ * (luminance-preserving grayscale, альфа не трогается) и кладёт результат в атлас
+ * под ID {@code sprite}.
  * <p>
  * Заменяет собой заранее нарисованные {@code *_dyed_base.png}: та же самая идея
  * ("текстура + полное убирание saturation, потом цвет через tintIndex"), но
@@ -33,15 +32,27 @@ import java.util.Optional;
  * реальный PNG; теперь это ВИРТУАЛЬНЫЙ спрайт, генерируемый этим классом под тем
  * же самым именем, так что сами JSON-модели менять не пришлось.
  * <p>
- * <b>ВАЖНО:</b> сигнатуры {@link SpriteSource}/{@link SpriteContents} сверены с
- * реальным decompiled-исходником для MC 1.21.1/NeoForge 21.1.228. Единственное,
- * что ещё НЕ подтверждено напрямую (нет исходника под рукой на момент написания):
- * <ol>
- *   <li>Точная форма {@link SpriteSourceType} — предполагается конструктор,
- *       принимающий {@code MapCodec<? extends SpriteSource>}.</li>
- *   <li>Существование {@code ResourceMetadata.EMPTY} как способа получить "пустые"
- *       метаданные (нужно для конструктора {@link SpriteContents}).</li>
- * </ol>
+ * <b>ВАЖНО — конфиг атласа ОБЯЗАН лежать в namespace {@code minecraft}, а не
+ * {@code bigtires}:</b> {@code assets/minecraft/atlases/blocks.json} (НЕ
+ * {@code assets/bigtires/atlases/blocks.json}!). Причина — в
+ * {@code SpriteSourceList.load(ResourceManager, ResourceLocation)}: атлас
+ * "blocks" грузится с location {@code minecraft:blocks}, что конвертируется в
+ * файл {@code minecraft:atlases/blocks.json}, и читается через
+ * {@code resourceManager.getResourceStack(...)} — а это ищет ресурс по
+ * ТОЧНОМУ namespace+path. "Слияние всех модов" в один атлас работает через то,
+ * что НЕСКОЛЬКО pack'ов (в т.ч. модовые jar'ы) могут положить файл по ОДНОМУ И
+ * ТОМУ ЖЕ namespace+path ({@code minecraft:atlases/blocks.json}) — тогда
+ * {@code getResourceStack} вернёт ВСЕ версии, и их "sources" сложатся вместе.
+ * Файл в СВОЁМ namespace (например {@code bigtires:atlases/blocks.json})
+ * попросту никогда не запрашивается и не читается — БЕЗ единой ошибки в логе,
+ * так как чтения не происходит вовсе. Это и было реальной причиной бага
+ * "полосы на WheelMount, ничего не меняется от правок кода": наш
+ * {@code DesaturateSpriteSource} никогда не вызывался, спрайт
+ * {@code bigtires:block/*_dyed_base} никогда не регистрировался (см. warning
+ * {@code "Missing textures in model ...#standalone"} в логе), и рендерилась
+ * ванильная {@code MissingTextureAtlasSprite} (пурпурно-чёрная шахматка) —
+ * которая, помноженная на выбранный цвет краски, и давала на экране
+ * чередующиеся чёрные/цветные полосы на изогнутой поверхности шины.
  */
 public record DesaturateSpriteSource(ResourceLocation source, Optional<ResourceLocation> sprite) implements SpriteSource {
 
