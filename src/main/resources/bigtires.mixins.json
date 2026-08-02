@@ -3,12 +3,15 @@
   "minVersion": "0.8",
   "package": "ughdhdh.bigtires.mixin",
   "compatibilityLevel": "JAVA_21",
+  "plugin": "ughdhdh.bigtires.mixin.BigTiresMixinPlugin",
   "mixins": [
     "MixinWheelMountBlockEntity",
     "MixinWheelMountValueBox"
   ],
   "client": [
-    "MixinWheelMountRenderer"
+    "MixinWheelMountRenderer",
+    "MixinAdjustableWheelMountRenderer",
+    "MixinTracksPlusWheelMountRenderer"
   ],
   "injectors": { "defaultRequire": 1 }
 }
